@@ -35,6 +35,7 @@ class AddHospitalEquipment extends Component {
       if (Number(this.refs[product.id].value) > 0) {
         equipment.push({
           productId: product.id,
+          displayName: product.displayName,
           amount: Number(this.refs[product.id].value)
         })
       }

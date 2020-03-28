@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import LocationPicker from 'react-location-picker';
 import NodeGeocoder from 'node-geocoder';
 import Geocode from "react-geocode";
+import _ from 'lodash';
 
 const defaultPosition = {
   lat: 42.149210,
@@ -23,7 +24,7 @@ Geocode.setApiKey(options.apiKey);
 Geocode.setLanguage("bg");
 
 // set response region. Its optional.
-// A Geocoding request with region=es (Spain) will return the Spanish city.
+// A Geocoding request with region=es (Spain) will return the Spanish locality.
 Geocode.setRegion("bg");
 
 // Enable or disable logs. Its optional.
@@ -34,7 +35,7 @@ class AddHospitalDetails extends Component {
   state = {
     name: '',
     address: {
-      city: '',
+      locality: '',
       formattedAddress: '',
       position: {
         lat: 0,
@@ -83,10 +84,16 @@ class AddHospitalDetails extends Component {
         const res = response.results[0];
         const { lat, lng } = res.geometry.location;
         const formattedAddress = res.formatted_address;
-        const city = res.address_components[2].short_name;
+        let locality = '';
+
+        _.forEach(res.address_components, (comp) => {
+          if (_.includes(comp.types, "locality")) {
+            locality = comp.short_name;
+          }
+        })
 
         const address = {
-          city: city,
+          locality: locality,
           formattedAddress: formattedAddress,
           position: { lat, lng }
         }
@@ -110,10 +117,16 @@ class AddHospitalDetails extends Component {
         const res = response.results[0];
         const { lat, lng } = res.geometry.location;
         const formattedAddress = res.formatted_address;
-        const city = res.address_components[2].short_name;
+        let locality = '';
+
+        _.forEach(res.address_components, (comp) => {
+          if (_.includes(comp.types, "locality")) {
+            locality = comp.short_name;
+          }
+        })
 
         const address = {
-          city: city,
+          locality: locality,
           formattedAddress: formattedAddress,
           position: { lat, lng }
         }
@@ -130,7 +143,7 @@ class AddHospitalDetails extends Component {
   updateAddress = this._updateAddress.bind(this);
 
   render() {
-    const { formattedAddress, city, position } = this.state.address;
+    const { formattedAddress, locality, position } = this.state.address;
 
     return (
       <div className="ab-form__step">
@@ -182,7 +195,7 @@ class AddHospitalDetails extends Component {
                   </div>
                   <div className="ab-form__field__output__item">
                     <h6>Населено място: </h6>
-                    <p>{ city }</p>
+                    <p>{ locality }</p>
                   </div>
                   <div className="ab-form__field__output__item">
                     <h6>Географска позиция: </h6>

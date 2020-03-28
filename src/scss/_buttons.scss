@@ -32,3 +32,15 @@ button {
   margin: 30px 0px;
   justify-content: space-between;
 }
+
+.ab-link {
+  color: $ab--accent;
+
+  svg {
+    fill: $ab--accent;
+  }
+}
+
+.is--active {
+  background-color: red;
+}

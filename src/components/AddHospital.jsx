@@ -13,7 +13,7 @@ import AddHospitalThankYou from './forms/_AddHospitalThankYou';
 const defVals = {
   name: '',
   address: {
-    city: '',
+    locality: '',
     formattedAddress: '',
     position: {
       lat: 0,
@@ -45,6 +45,7 @@ class AddHospital extends Component {
   }
 
   updateStore(update) {
+    console.log('we get update ', update);
     this.sampleStore = {
       ...this.sampleStore,
       ...update,

@@ -7,11 +7,19 @@
   display: flex;
   align-items: center;
   @include u-box-shadow-sm;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  left: 0;
 
   &--inner {
     display: flex;
     justify-content: space-between;
   }
+}
+
+.ab {
+  padding-top: $h--lg;
 }
 
 ul, ol {
@@ -160,3 +168,136 @@ ol.progtrckr {
 .ab-add-hospital {
   padding: 90px 0px;
 }
+
+.has--sidenav {
+  padding-left: 280px;
+}
+
+.ab-sidenav {
+  width: 280px;
+  position: fixed;
+  top: 90px;
+  min-height: calc(100vh - 90px);
+  left: 0;
+}
+
+.ab-hospitals__list {
+  background-color: $ab--lightgrey;
+  min-height: calc(100vh - 90px);
+  padding: 30px;
+}
+
+.ab-hospitals__list__item {
+  height: $h--xl;
+  background-color: white;
+  width: 100%;
+  opacity: 0;
+  max-height: 0px;
+
+  display: flex;
+
+  .ab-hospital__info {
+    flex-basis: 0;
+    flex-grow: 1;
+  }
+
+  .ab-hospital__equipment {
+    flex-basis: 0;
+    flex-grow: 2;
+  }
+
+  .ab-hospital__more {
+    width: 120px;
+    max-width: 120px;
+    border: none;
+    background-color: pink;
+  }
+
+  &.is--visible {
+    max-height: 120px;
+    opacity: 1;
+  }
+}
+
+.ab-filter {
+  &__group {
+    padding: 30px 15px;
+    border-bottom: 1px solid $ab--lightgrey;
+  }
+
+  &__item {
+    padding: 0px 15px 0px 30px;
+    position: relative;
+    border: none;
+    background-color: transparent;
+    display: block;
+    text-align: left;
+    width: 100%;
+    height: $h--md;
+    display: flex;
+    align-items: center;
+    transition: 0.1s all;
+
+
+    &:before {
+      height: $h--xs;
+      width: $h--xs;
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translate3d(0, -50%, 0);
+      border-radius: 50%;
+      border: 1px solid $ab--grey;
+      transition: 0.1s all;
+    }
+
+    &.is--active {
+      color: $ab--accent;
+
+      &:before {
+        background-color: $ab--accent;
+        border: 1px solid $ab--accent;
+      }
+    }
+  }
+}
+
+.ab-hospital__info,
+.ab-hospital__equipment {
+  padding: $h--sm;
+  border-right: 2px solid $ab--lightgrey;
+}
+
+.ab-equipment {
+  display: flex;
+
+  &__item {
+    height: $h--sm;
+    background-color: $ab--grey;
+    display: flex;
+    border-radius: 6px;
+    margin: 0px 3px;
+
+    &__name {
+      border-right: 1px solid white;
+      font-weight: 600;
+    }
+
+    &__name,
+    &__amount {
+      display: block;
+      margin: 0px;
+      padding: 5px 15px;
+      display: flex;
+      align-items: center;
+    }
+  }
+}
+
+
+
+
+
+
+
