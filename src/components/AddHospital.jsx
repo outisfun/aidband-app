@@ -2,8 +2,11 @@ import React, { Component } from 'react';
 import { firestore } from '../utils/firebase.js';
 import StepZilla from "react-stepzilla";
 
+import Container from "./layout/Container";
+
 // steps
 import AddHospitalDetails from './forms/_AddHospitalDetails';
+import AddHospitalEquipment from './forms/_AddHospitalEquipment';
 import AddHospitalThankYou from './forms/_AddHospitalThankYou';
 
 
@@ -24,20 +27,7 @@ const defVals = {
       phoneNumber: ''
     }
   ],
-  departments: [
-    {
-      name: '',
-      beds: 0 // ???
-    }
-  ],
-  equipment: [
-    {
-      productId: 'mask', // ref za N95 maski primerno
-      available: 100,
-      needed: 400 // request is posted if needed > available
-    },
-    // { ... } // same za ostanalite
-  ]
+  equipment: []
 }
 
 class AddHospital extends Component {
@@ -48,6 +38,7 @@ class AddHospital extends Component {
   }
 
   sampleStore = defVals;
+  hasUploaded = false;
 
   getStore() {
     return this.sampleStore;
@@ -58,17 +49,17 @@ class AddHospital extends Component {
       ...this.sampleStore,
       ...update,
     }
-
-    if (this.state.currentStep === 0) {
-      this.uploadToFB();
-    }
   }
 
   uploadToFB() {
+    const hospital = this.sampleStore;
+
+    console.log('upload to fb');
+
     firestore.collection('hospitals')
-      .add({ })
+      .add(hospital)
       .then((docRef) => {
-        console.log('hospital added');
+        console.log('hospital added!');
         // this.setState({ id: docRef.id });
       })
       .catch(function(error) {
@@ -77,37 +68,53 @@ class AddHospital extends Component {
   }
 
   render() {
+    console.log(this.sampleStore, this.currentStep);
     const steps = [
       {
-        name: "Добави име и локация",
+        name: "Име и локация",
         component:
           <AddHospitalDetails
             getStore={() => (this.getStore())}
             updateStore={(u) => {this.updateStore(u)}} />
       },
       {
-        name: "Благодарим!",
+        name: "Оборудване",
+        component:
+          <AddHospitalEquipment
+            getStore={() => (this.getStore())}
+            updateStore={(u) => {this.updateStore(u)}} />
+      },
+      {
+        name: "Изпрати",
         component:
           <AddHospitalThankYou />
       }
     ]
 
     return (
-      <div className="ab-add-hospital ab-form__steps">
-        <h1>add hospital</h1>
-        <StepZilla
-          steps={steps}
-          preventEnterSubmission={true}
-          nextTextOnFinalActionStep='final!'
-          prevBtnOnLastStep={false}
-          stepsNavigation={false}
-          onStepChange={step => {
-              this.setState({ currentStep: step });
-              window.sessionStorage.setItem("step", step);
+      <Container>
+        <div className="ab-add-hospital ab-form__steps">
+          <h1>Добави болница</h1>
+          <StepZilla
+            steps={steps}
+            preventEnterSubmission={true}
+            nextTextOnFinalActionStep='Изпрати'
+            prevBtnOnLastStep={false}
+            stepsNavigation={false}
+            onStepChange={step => {
+                console.log('step change to ', step);
+                this.setState({ currentStep: step });
+                window.sessionStorage.setItem("step", step);
+
+                if (step === 2 && !this.hasUploaded) {
+                  this.hasUploaded = true;
+                  this.uploadToFB();
+                }
+              }
             }
-          }
-        />
-      </div>
+          />
+        </div>
+      </Container>
     )
   }
 }

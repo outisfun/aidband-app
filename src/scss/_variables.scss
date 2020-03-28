@@ -1,0 +1,18 @@
+$ab--accent: #4C52E0;
+$ab--secondary: #FEE6A0;
+$ab--grey: #e0e0e0;
+$ab--lightgrey: #f7f7f7;
+$ab--white: #fff;
+$ab--darkgrey: #555;
+$ab--black: #000;
+
+$h--xs: 12px;
+$h--sm: 18px;
+$h--md: 45px;
+$h--lg: 90px;
+$h--xl: 120px;
+
+@mixin u-box-shadow-sm {
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+  transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+}

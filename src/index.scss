@@ -1,4 +1,162 @@
-body {
-  background-color: red;
+@import 'scss/variables';
+@import 'scss/typography';
+@import 'scss/buttons';
+
+.ab-header {
+  height: $h--lg;
+  display: flex;
+  align-items: center;
+  @include u-box-shadow-sm;
+
+  &--inner {
+    display: flex;
+    justify-content: space-between;
+  }
 }
 
+ul, ol {
+  list-style: none;
+  margin: 0px;
+  padding: 0px;
+}
+
+* {
+  box-sizing: border-box;
+
+  &:hover,
+  &:focus {
+    outline: none!important;
+  }
+}
+
+.ab-container {
+  max-width: 1100px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.ab-form__steps {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.ab-form {
+  max-width: 600px;
+  margin: 0 auto;
+
+  &__label {
+    font-weight: 500;
+    margin-bottom: $h--xs;
+    display: block;
+    font-size: 0.85em;
+  }
+
+  &__field {
+
+    &.field--validate {
+
+      margin: 15px 0px;
+
+      .wrapper {
+        display: flex;
+        width: 100%;
+
+        button {
+          margin-left: 15px;
+        }
+      }
+    }
+
+    &.field--units {
+      padding: 15px 0px;
+      border-bottom: 1px solid $ab--lightgrey;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      .field-wrapper {
+        display: flex;
+        align-items: center;
+      }
+
+      .units {
+        margin-left: 15px;
+      }
+
+      .ab-form__label {
+        margin-right: 15px;
+        margin-bottom: 0px;
+        font-weight: 600;
+      }
+
+      input {
+        width: 100px;
+        margin: 0px;
+      }
+    }
+  }
+
+  &__field__output {
+    background-color: $ab--grey;
+    padding: 15px;
+
+  }
+}
+
+input, textarea {
+  background-color: $ab--lightgrey;
+  border-radius: 2px;
+  box-shadow: none;
+  border: none;
+  width: 100%;
+  margin-bottom: 30px;
+  padding: 0px 15px;
+  border-radius: 6px;
+  font-size: 100%;
+}
+
+input {
+  height: $h--md;
+}
+
+textarea {
+  min-height: $h--xl;
+}
+
+.ab-add-map--container {
+  height: 300px;
+
+  .ab-add-map {
+    height: 100%;
+  }
+}
+
+ol.progtrckr {
+  list-style: none;
+  display: flex;
+  margin: $h--md 0px;
+
+  em {
+    display: none;
+  }
+
+  li {
+    flex-basis: 0;
+    flex-grow: 1;
+    color: $ab--darkgrey;
+    border-bottom: 3px solid $ab--lightgrey;
+    padding: 15px 15px;
+
+    &.progtrckr-doing {
+      border-bottom: 3px solid $ab--accent;
+    }
+  }
+}
+
+.ab {
+  min-height: 100vh;
+}
+
+.ab-add-hospital {
+  padding: 90px 0px;
+}
