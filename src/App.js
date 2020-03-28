@@ -1,25 +1,23 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Switch, Route, Link, withRouter } from 'react-router-dom';
+import { StickyContainer } from 'react-sticky';
+
+import Hospitals from './components/Hospitals';
+import AddHospital from './components/AddHospital';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <StickyContainer>
+      <main className="Application">
+        <div className="ab">
+          <div className="no-mobile"><span>Desktop only! Sorry!</span></div>
+          <Switch>
+            <Route exact path ="/" component = {Hospitals} />
+            <Route exact path ="/add-hospital" component = {AddHospital} />
+          </Switch>
+        </div>
+      </main>
+    </StickyContainer>
   );
 }
 
