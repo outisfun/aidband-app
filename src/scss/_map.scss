@@ -1,0 +1,92 @@
+.fb-marker {
+  position: relative;
+
+  &__window {
+    opacity: 0;
+    pointer-events: none;
+    transition: 0.1s all;
+    height: 130px;
+    width: 300px;
+    @include u-box-shadow-sm;
+    position: absolute;
+    top: -150px;
+    left: -130px;
+    background-color: $ab--lightestgrey;
+
+    &:after {
+      width: 0;
+      height: 0;
+      border-left: 12px solid transparent;
+      border-right: 12px solid transparent;
+      border-top: 12px solid $ab--lightestgrey;
+
+      content: '';
+      position: absolute;
+      bottom: -11px;
+      left: 50%;
+      transform: translate3d(-50%, 0, 0);
+    }
+
+    &__content {
+      width: 100%;
+
+
+      .ab-equipments {
+        display: flex;
+        height: 100%;
+        padding: 15px 5px;
+
+        &__item {
+          height: $h--sm;
+          background-color: $ab--lightgrey;
+          display: flex;
+          border-radius: 6px;
+          margin: 0px 3px;
+
+          &__name {
+            border-right: 1px solid white;
+            font-weight: 600;
+          }
+
+          &__name,
+          &__amount {
+            display: block;
+            margin: 0px;
+            padding: 5px 15px;
+            display: flex;
+            align-items: center;
+          }
+        }
+      }
+    }
+
+    &__footer {
+      background-color: $ab--accent;
+      width: 100%;
+    }
+
+    &__header {
+      background-color: white;
+      z-index: 20;
+      position: relative;
+      display: flex;
+      height: $h--md;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      max-width: 100%;
+      padding: 0px 15px;
+
+      h5 {
+        font-size: 18px;
+      }
+    }
+  }
+
+  &.is--active {
+    .fb-marker__window {
+      opacity: 1;
+      pointer-events: all;
+    }
+  }
+}

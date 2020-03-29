@@ -14,6 +14,9 @@
 
 button {
   font-size: 100%;
+  border: none;
+  box-shadow: none;
+
 }
 
 .btn {
@@ -43,4 +46,20 @@ button {
 
 .is--active {
   background-color: red;
+}
+
+a {
+  text-decoration: none;
+}
+
+.ab-icon {
+
+  &--xs {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+a, button {
+  font-size: 100%;
 }

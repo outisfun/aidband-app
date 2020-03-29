@@ -1,7 +1,7 @@
 const products = [
   {
     id: 'mask_n95',
-    displayName: 'Медицинска маска за многократна употреба',
+    displayName: 'Маски',
     amountType: 'number',
     variableProps: {
       // unique for each product -> TBD later

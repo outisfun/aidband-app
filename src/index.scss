@@ -1,6 +1,8 @@
 @import 'scss/variables';
 @import 'scss/typography';
 @import 'scss/buttons';
+@import 'scss/filters';
+@import 'scss/map';
 
 .ab-header {
   height: $h--lg;
@@ -11,6 +13,7 @@
   top: 0;
   width: 100%;
   left: 0;
+  z-index: 100;
 
   &--inner {
     display: flex;
@@ -182,7 +185,7 @@ ol.progtrckr {
 }
 
 .ab-hospitals__list {
-  background-color: $ab--lightgrey;
+  background-color: $ab--lightestgrey;
   min-height: calc(100vh - 90px);
   padding: 30px;
 }
@@ -191,9 +194,6 @@ ol.progtrckr {
   height: $h--xl;
   background-color: white;
   width: 100%;
-  opacity: 0;
-  max-height: 0px;
-
   display: flex;
 
   .ab-hospital__info {
@@ -210,58 +210,19 @@ ol.progtrckr {
     width: 120px;
     max-width: 120px;
     border: none;
-    background-color: pink;
-  }
-
-  &.is--visible {
-    max-height: 120px;
-    opacity: 1;
-  }
-}
-
-.ab-filter {
-  &__group {
-    padding: 30px 15px;
-    border-bottom: 1px solid $ab--lightgrey;
-  }
-
-  &__item {
-    padding: 0px 15px 0px 30px;
-    position: relative;
-    border: none;
-    background-color: transparent;
-    display: block;
-    text-align: left;
-    width: 100%;
-    height: $h--md;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    transition: 0.1s all;
+    justify-content: center;
+    color: $ab--accent;
+    font-weight: 600;
 
-
-    &:before {
-      height: $h--xs;
-      width: $h--xs;
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 50%;
-      transform: translate3d(0, -50%, 0);
-      border-radius: 50%;
-      border: 1px solid $ab--grey;
-      transition: 0.1s all;
-    }
-
-    &.is--active {
-      color: $ab--accent;
-
-      &:before {
-        background-color: $ab--accent;
-        border: 1px solid $ab--accent;
-      }
+    svg {
+      fill: $ab--accent;
     }
   }
 }
+
 
 .ab-hospital__info,
 .ab-hospital__equipment {
@@ -274,7 +235,7 @@ ol.progtrckr {
 
   &__item {
     height: $h--sm;
-    background-color: $ab--grey;
+    background-color: $ab--lightgrey;
     display: flex;
     border-radius: 6px;
     margin: 0px 3px;
@@ -295,9 +256,152 @@ ol.progtrckr {
   }
 }
 
+.ab-hospitals__list__item {
 
+  .ab-hospital__name {
+    margin-bottom: $h--xs;
+  }
 
+  .ab-hospital__location {
+    .ab-hospital__address {
+      color: $ab--grey;
+      margin-bottom: $h--xs;
+    }
+  }
 
+  .ab-link {
+    display: flex;
+    align-items: center;
+  }
+}
 
+.ab-h6 {
+  color: $ab--grey;
+  font-weight: 500;
+}
+
+.ab-hospitals__list__labels {
+  display: flex;
+  align-items: center;
+  padding: 15px 0px;
+
+  .ab-list__label {
+    flex-basis: 0;
+    flex-grow: 1;
+    padding: 0px 15px;
+
+    &.label--1 {
+      min-width: 320px;
+    }
+
+    &.label--2 {
+      flex-grow: 2;
+    }
+
+    &.label--120 {
+      max-width: 120px;
+      width: 120px;
+    }
+  }
+}
+
+.ab-tablist {
+
+  padding: 30px 15px;
+}
+
+.react-tabs__tab-list {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.react-tabs__tab {
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+  color: $ab--grey;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  svg {
+    fill: $ab--grey;
+  }
+
+  &.react-tabs__tab--selected {
+    color: $ab--accent;
+    svg {
+      fill: $ab--accent;
+    }
+  }
+}
+
+.ab-header {
+  &--inner {
+    width: 100%;
+    padding: 0px 15px;
+  }
+}
+
+.ab-header__nav {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate3d(-50%, 0, 0);
+  height: 100%;
+
+  ul {
+    height: 100%;
+    display: flex;
+    /*align-items: center;*/
+
+    li {
+      display: flex;
+      align-items: center;
+      padding: 0px 15px;
+      flex-direction: column;
+      justify-content: center;
+
+      svg {
+
+      }
+    }
+  }
+
+  &__item {
+    border-bottom: 5px solid transparent;
+    svg {
+      position: absolute;
+      top: 20px;
+    }
+    small {
+      height: 20px;
+      margin-top: 25px;
+    }
+    &.item--truck {
+      svg {
+        top: 10px;
+      }
+    }
+
+    &.is--current {
+      border-bottom: 5px solid $ab--accent;
+    }
+  }
+}
+
+.ab-header__brand {
+  display: flex;
+  align-items: center;
+  font-size: 20px;
+  color: $ab--accent;
+  font-weight: 600;
+
+  svg {
+    stroke: $ab--accent;
+    margin-right: 15px;
+  }
+}
 
 

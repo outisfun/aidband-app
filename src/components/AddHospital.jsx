@@ -55,8 +55,6 @@ class AddHospital extends Component {
   uploadToFB() {
     const hospital = this.sampleStore;
 
-    console.log('upload to fb');
-
     firestore.collection('hospitals')
       .add(hospital)
       .then((docRef) => {

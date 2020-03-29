@@ -1,116 +1,167 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { HospitalsContext } from '../providers/HospitalsProvider';
 import SideNav from './layout/SideNav';
 import Container from './layout/Container';
-import IosPinOutline from 'react-ionicons/lib/IosPinOutline';
+import HospitalListItem from './hospitals/HospitalListItem';
+import FilterListItem from './hospitals/FilterListItem';
+import { Scrollbars } from 'react-custom-scrollbars';
+import HospitalsMap from './HospitalsMap';
+import IosPin from 'react-ionicons/lib/IosPin';
+import IosList from 'react-ionicons/lib/IosList';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+
 import _ from 'lodash';
 
 import products from '../utils/products.js'; // replace later
+import municipalities from '../utils/municipalities.js';
 
-const GmapsLink = ({ lat, lng }) => {
-
-  const href=`https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
-
-  return (
-    <a target="_blank"
-        className="ab-link ab-link--external"
-        href={href}>
-        <IosPinOutline className="ab-icon ab-icon--xs" />
-        <small>Към карта</small>
-    </a>
-  )
-}
-
-const _Hospital = ({ id, name, address, equipment, isShown }) => {
-  const cls = isShown ? 'is--visible' : '';
-  return (
-    <div className={`ab-hospitals__list__item ab-hospital ${cls}`}>
-      <div className="ab-hospital__info">
-        <h3 className="ab-hospital__name">{ name }</h3>
-        <div className="ab-hospital__location">
-          <p className="ab-hospital__address">{address.locality}</p>
-          <GmapsLink {...address.position} />
-        </div>
-      </div>
-      <div className="ab-hospital__equipment ab-equipment">
-        {
-          equipment && equipment.map((item, index) => {
-            return (
-              <div className="ab-equipment__item">
-                <span className="ab-equipment__item__name">{item.displayName}</span>
-                <span className="ab-equipment__item__amount">{item.amount}</span>
-              </div>
-            )
-          })
-        }
-      </div>
-      <button className="ab-hospital__more">
-      </button>
-    </div>
-  )
-}
 
 const Hospitals = () => {
+
   const hospitals = useContext(HospitalsContext);
+
+  const [currentHospitals, setCurrentHospitals] = useState([]);
   const [filters, setFilters] = useState([]);
-  console.log(hospitals);
+  const [currentMunicipalities, setMunicipalities] = useState([]);
+
+  useEffect(() => {
+    // Update the document title using the browser API
+    console.log('use effect');
+  });
 
   const toggleFilter = (filter) => {
     let _filters = filters;
     if (!(_.includes(_filters, filter))) {
       _filters.push(filter);
-
     } else {
       _.pull(_filters, filter);
     }
     setFilters([..._filters]);
   }
 
+  const toggleMunicipality = (municipality) => {
+    let _municipalities = currentMunicipalities;
+    console.log(municipality, currentMunicipalities);
+
+    if (!(_.includes(_municipalities, municipality))) {
+      _municipalities.push(municipality);
+    } else {
+      _.pull(_municipalities, municipality);
+    }
+    console.log(municipality, _municipalities);
+    setMunicipalities([..._municipalities]);
+  }
+
+  // hospitals && setCurrentHospitals([...hospitals]);
+
+
+
+  let _hospitals = hospitals ? [...hospitals] : null;
+
+  _.forEach(_hospitals, hospital => {
+
+    let __onLocation = true;
+    let __onEquipment = true; // display by default
+
+    if (filters.length) {
+      __onEquipment = false;
+
+      _.forEach(hospital.equipment, (item) => {
+        if (_.includes(filters, item.productId)) {
+          __onEquipment = true;
+        }
+      });
+    }
+
+    if (currentMunicipalities.length) {
+      __onLocation = false;
+
+      if (_.includes(currentMunicipalities, hospital.address.municipality)) {
+        __onLocation = true;
+      }
+    }
+
+    const isShown = (__onLocation && __onEquipment);
+    (!isShown) && _.pull(_hospitals, hospital);
+    (isShown && (!_.includes(_hospitals, hospital))) && _hospitals.push(hospital);
+  });
+
   return (
 
     <div className="ab-hospitals has--sidenav">
       <SideNav>
-        <div className="ab-hospitals__filters ab-filters">
-          <div className="ab-filter--products ab-filter__group">
-            { products && products.map((product, index) => {
-              const onClick = () => { toggleFilter(product.id); };
-              const cls = (_.includes(filters, product.id)) ? 'is--active' : '';
+        <Scrollbars style={{ height: (window.innerHeight - 90) }}>
+          <div className="ab-hospitals__filters ab-filters">
+            <div className="ab-filter--products ab-filter__group">
+              <h6 className="ab-filter__group__title">Продукти</h6>
+              { products && products.map((product, index) => {
+                const onClick = () => { toggleFilter(product.id); };
+                const cls = (_.includes(filters, product.id)) ? 'is--active' : '';
 
-              return (
-                <button
-                  key={`filter--${product.id}`}
-                  className={`ab-filter__item ${cls}`}
-                  onClick={onClick}
-                  data-product={product.id}>
-                    {product.displayName}
-                </button>
-              )
-            })}
+                return (
+                  <FilterListItem
+                    key={`filter--${product.id}`}
+                    cls={cls}
+                    text={product.displayName}
+                    onClick={onClick} />
+                )
+              })}
+            </div>
+
+            <div className="ab-filter--products ab-filter__group">
+              <h6 className="ab-filter__group__title">Области</h6>
+              { municipalities && municipalities.map((municipality, index) => {
+                const onClick = () => { toggleMunicipality(municipality); };
+                const cls = (_.includes(currentMunicipalities, municipality)) ? 'is--active' : '';
+
+                return (
+                  <FilterListItem
+                    key={`filter--${municipality}`}
+                    cls={cls}
+                    text={municipality}
+                    onClick={onClick} />
+                )
+              })}
+            </div>
           </div>
-        </div>
+        </Scrollbars>
       </SideNav>
-      <div className="ab-hospitals__list">
-        <div className="ab-hospitals__list__labels">
-        </div>
-        <Container>
-          { hospitals && hospitals.map((hospital, index) => {
 
-            let isShown = true;
-            if (filters.length > 0) {
-              isShown = false;
+        <Tabs onSelect={(val) => {
+          }}>
+          <div className="ab-tablist">
+            <TabList>
+              <Tab><IosList className="ab-icon ab-icon--sm" /><small>Списък</small></Tab>
+              <Tab><IosPin className="ab-icon ab-icon--sm" /><small>Карта</small></Tab>
+            </TabList>
+          </div>
 
-              // start checking?
-              _.forEach(hospital.equipment, item => {
-                if (_.includes(filters, item.productId)) {
-                  isShown=true;
-                }
-              });
-            }
-            return <_Hospital {...hospital} isShown={isShown} key={`hospital--${index}`} />
+          <TabPanel>
+            <div className="ab-hospitals__list">
+              <Container>
+                <div className="ab-hospitals__list__labels">
+                  <h6 className="ab-list__label ab-h6 label--1">
+                    Здравно заведение
+                  </h6>
+                  <h6 className="ab-list__label ab-h6 label--2">
+                    Нужди
+                  </h6>
+                  <h6 className="ab-list__label ab-h6 label--120">
+                    Контакти
+                  </h6>
+                </div>
+                { _hospitals && _hospitals.map((hospital, index) => {
+                  return <HospitalListItem {...hospital} key={`hospital--${index}`} />
+                })}
+              </Container>
+            </div>
+          </TabPanel>
+          <TabPanel>
+            <HospitalsMap hospitals={_hospitals} />
+          </TabPanel>
 
-          })}
-        </Container>
-      </div>
+        </Tabs>
+
     </div>
   )
 }

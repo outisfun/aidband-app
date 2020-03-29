@@ -36,6 +36,7 @@ class AddHospitalDetails extends Component {
     name: '',
     address: {
       locality: '',
+      municipality: '',
       formattedAddress: '',
       position: {
         lat: 0,
@@ -61,7 +62,6 @@ class AddHospitalDetails extends Component {
 
     // before updating store, we need to geocode the address
     const onStepSubmit = ({ name, address }) => {
-      console.log('on step submit ', name, address);
       updateStore({ name, address });
       return true;
     }
@@ -85,15 +85,22 @@ class AddHospitalDetails extends Component {
         const { lat, lng } = res.geometry.location;
         const formattedAddress = res.formatted_address;
         let locality = '';
+        let municipality = '';
+
+        console.log('res be', res);
 
         _.forEach(res.address_components, (comp) => {
           if (_.includes(comp.types, "locality")) {
             locality = comp.short_name;
           }
+          if (_.includes(comp.types, "administrative_area_level_1")) {
+            municipality = comp.short_name;
+          }
         })
 
         const address = {
           locality: locality,
+          municipality: municipality,
           formattedAddress: formattedAddress,
           position: { lat, lng }
         }
@@ -118,10 +125,14 @@ class AddHospitalDetails extends Component {
         const { lat, lng } = res.geometry.location;
         const formattedAddress = res.formatted_address;
         let locality = '';
+        let municipality = '';
 
         _.forEach(res.address_components, (comp) => {
           if (_.includes(comp.types, "locality")) {
             locality = comp.short_name;
+          }
+          if (_.includes(comp.types, "administrative_area_level_1")) {
+            municipality = comp.short_name;
           }
         })
 
