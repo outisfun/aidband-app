@@ -34,14 +34,15 @@
       .ab-equipments {
         display: flex;
         height: 100%;
-        padding: 15px 5px;
+        padding: 0px 5px;
+        flex-wrap: wrap;
 
-        &__item {
+        .ab-equipment__item {
           height: $h--sm;
           background-color: $ab--lightgrey;
           display: flex;
           border-radius: 6px;
-          margin: 0px 3px;
+          margin: 3px 3px;
 
           &__name {
             border-right: 1px solid white;
@@ -52,7 +53,7 @@
           &__amount {
             display: block;
             margin: 0px;
-            padding: 5px 15px;
+            padding: 5px 5px!important;
             display: flex;
             align-items: center;
           }

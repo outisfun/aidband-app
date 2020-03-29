@@ -14,6 +14,7 @@
   width: 100%;
   left: 0;
   z-index: 100;
+  background-color: white;
 
   &--inner {
     display: flex;
@@ -174,6 +175,7 @@ ol.progtrckr {
 
 .has--sidenav {
   padding-left: 280px;
+  background-color: $ab--lightestgrey;
 }
 
 .ab-sidenav {
@@ -182,6 +184,7 @@ ol.progtrckr {
   top: 90px;
   min-height: calc(100vh - 90px);
   left: 0;
+  background-color: white;
 }
 
 .ab-hospitals__list {
@@ -366,6 +369,16 @@ ol.progtrckr {
       flex-direction: column;
       justify-content: center;
 
+      a {
+        height: 100%;
+        width: 100%;
+        flex-direction: column;
+        justify-content: center;
+        display: flex!important;
+        align-items: center;
+        color: $ab--darkgrey;
+      }
+
       svg {
 
       }
@@ -401,10 +414,172 @@ ol.progtrckr {
   color: $ab--accent;
   font-weight: 600;
 
+  a {
+    display: flex!important;
+    align-items: center;
+    color: $ab--accent;
+  }
+
   svg {
     stroke: $ab--accent;
     margin-right: 15px;
   }
 }
 
+.ab-heading--1 {
+  font-size: 40px;
+  font-weight: 600;
+  text-align: center;
+  max-width: 840px;
+  margin: 0 auto;
+  margin-bottom: 30px;
+}
 
+.ab-p {
+    color: $ab--grey;
+    font-size: 21px;
+    line-height: 1.35em;
+    text-align: center;
+    max-width: 840px;
+    margin: 0 auto;
+    opacity: 0.75;
+  }
+
+
+.ab-home__widgets {
+  display: flex;
+  margin: 0px -15px;
+
+  .ab-home__widget {
+    flex-basis: 0;
+    flex-grow: 1;
+    margin: 0px 15px;
+    height: 300px;
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    @include u-box-shadow-sm;
+
+    &__content {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      position: relative;
+      z-index: 20;
+      height: 100%;
+      width: 100%;
+      padding: 30px 15px;
+      color: white;
+
+      .ab-heading {
+        font-size: 30px;
+        font-weight: 600;
+        margin-bottom: 15px;
+      }
+
+      p {
+        color: white;
+        line-height: 1.2em;
+      }
+    }
+
+    &__background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+
+      .img, .gradient {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .img {
+        background-size: cover;
+        background-position: center center;
+        background-color: grey;
+        background-blend-mode: multiply;
+      }
+
+      .gradient {
+        background: rgb(61,68,233);
+        background: linear-gradient(0deg, rgba(61,68,233,0.5508578431372548) 0%, rgba(61,68,233,1) 100%);
+      }
+    }
+
+    &.widget--campaigns {
+      .ab-home__widget__background {
+        .img {
+          background-image: url('https://zeroattentionspan.net/zas/help.jpg');
+        }
+      }
+    }
+
+    &.widget--hospitals {
+      .ab-home__widget__background {
+        .img {
+          background-image: url('https://zeroattentionspan.net/zas/doctor.jpg');
+        }
+      }
+    }
+
+    &.widget--suppliers {
+      .ab-home__widget__background {
+        .img {
+          background-image: url('https://zeroattentionspan.net/zas/products.jpg');
+        }
+      }
+    }
+  }
+}
+
+.ab-home {
+
+  &__ffs,
+  &__about {
+    padding: 120px 0px;
+
+    @media (max-width: 1199px) {
+      display: none;
+    }
+  }
+
+  &__intro {
+    margin-bottom: 90px;
+  }
+}
+
+.ab-home__about {
+  padding: 90px 0px;
+  background-color: $ab--lightestgrey;
+
+  img {
+    width: 100%;
+    mix-blend-mode: multiply;
+    margin-top: 60px;
+  }
+}
+
+.desktop-only {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  color: white;
+  background-color: $ab--accent;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 120;
+
+  @media (min-width: 1200px) {
+    display: none;
+  }
+}

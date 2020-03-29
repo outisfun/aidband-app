@@ -19,12 +19,11 @@
     display: block;
     text-align: left;
     width: 100%;
-    height: $h--md;
+    height: 30px;
     display: flex;
     align-items: center;
     transition: 0.1s all;
     color: $ab--grey;
-
 
     &:before {
       height: $h--xs;

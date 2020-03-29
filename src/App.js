@@ -3,7 +3,7 @@ import { Switch, Route, Link, withRouter } from 'react-router-dom';
 import { StickyContainer } from 'react-sticky';
 
 import Hospitals from './components/Hospitals';
-import AddHospital from './components/AddHospital';
+import Homepage from './components/Homepage';
 import Header from './components/layout/Header';
 
 function App() {
@@ -13,8 +13,8 @@ function App() {
         <Header />
         <div className="ab">
           <Switch>
-            <Route exact path ="/" component = {Hospitals} />
-            <Route exact path ="/add-hospital" component = {AddHospital} />
+            <Route exact path ="/" component = {Homepage} />
+            <Route exact path ="/hospitals" component = {Hospitals} />
           </Switch>
         </div>
       </main>
