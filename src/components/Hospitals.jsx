@@ -41,7 +41,7 @@ const Hospitals = () => {
 
   const toggleMunicipality = (municipality) => {
     let _municipalities = currentMunicipalities;
-    console.log(municipality, currentMunicipalities);
+    console.log('filter', municipality, currentMunicipalities);
 
     if (!(_.includes(_municipalities, municipality))) {
       _municipalities.push(municipality);
@@ -58,6 +58,7 @@ const Hospitals = () => {
 
   let _hospitals = hospitals ? [...hospitals] : null;
 
+
   _.forEach(_hospitals, hospital => {
 
     let __onLocation = true;
@@ -66,24 +67,37 @@ const Hospitals = () => {
     if (filters.length) {
       __onEquipment = false;
 
-      _.forEach(hospital.equipment, (item) => {
-        if (_.includes(filters, item.productId)) {
-          __onEquipment = true;
-        }
-      });
+      console.log('whaat', _hospitals, hospital, hospital && hospital.equipment);
+      if (hospital) {
+          _.forEach(hospital.equipment, (item) => {
+          if (_.includes(filters, item.productId)) {
+            __onEquipment = true;
+          }
+        });
+      }
+
     }
 
     if (currentMunicipalities.length) {
       __onLocation = false;
 
-      if (_.includes(currentMunicipalities, hospital.address.municipality)) {
-        __onLocation = true;
+      if (hospital) {
+        if (_.includes(currentMunicipalities, hospital.address.municipality)) {
+          __onLocation = true;
+        }
+
+        if (_.includes(currentMunicipalities, "София") && _.includes(hospital.address.municipality, "София")) {
+          __onLocation = true;
+        }
       }
     }
 
     const isShown = (__onLocation && __onEquipment);
-    (!isShown) && _.pull(_hospitals, hospital);
-    (isShown && (!_.includes(_hospitals, hospital))) && _hospitals.push(hospital);
+
+    hospital.isShown = isShown;
+    // console.log('is it shown ', isShown, __onLocation, __onEquipment, hospital);
+    // (!isShown) && _.pull(_hospitals, hospital);
+    // (isShown && (!_.includes(_hospitals, hospital))) && _hospitals.push(hospital);
   });
 
   return (
@@ -150,14 +164,14 @@ const Hospitals = () => {
                     Контакти
                   </h6>
                 </div>
-                { _hospitals && _hospitals.map((hospital, index) => {
+                { _hospitals && _.filter(_hospitals, { 'isShown': true }).map((hospital, index) => {
                   return <HospitalListItem {...hospital} key={`hospital--${index}`} />
                 })}
               </Container>
             </div>
           </TabPanel>
           <TabPanel>
-            <HospitalsMap hospitals={_hospitals} />
+            <HospitalsMap hospitals={_.filter(_hospitals, { 'isShown': true })} />
           </TabPanel>
 
         </Tabs>

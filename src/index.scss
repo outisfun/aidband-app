@@ -108,7 +108,7 @@ ul, ol {
   }
 
   &__field__output {
-    background-color: $ab--grey;
+    background-color: $ab--lightgrey;
     padding: 15px;
 
   }
@@ -195,20 +195,24 @@ ol.progtrckr {
   background-color: white;
   width: 100%;
   display: flex;
+  margin-bottom: 15px;
 
   .ab-hospital__info {
-    flex-basis: 0;
-    flex-grow: 1;
+    width: 200px;
+    min-width: 200px;
   }
 
   .ab-hospital__equipment {
-    flex-basis: 0;
-    flex-grow: 2;
+    /*width: 800px;
+    min-width: 800px;*/
+    width: 100%;
+    flex-wrap: wrap;
   }
 
   .ab-hospital__more {
     width: 120px;
     max-width: 120px;
+    min-width: 120px;
     border: none;
     display: flex;
     flex-direction: column;
@@ -226,7 +230,7 @@ ol.progtrckr {
 
 .ab-hospital__info,
 .ab-hospital__equipment {
-  padding: $h--sm;
+  padding: 15px;
   border-right: 2px solid $ab--lightgrey;
 }
 
@@ -238,11 +242,11 @@ ol.progtrckr {
     background-color: $ab--lightgrey;
     display: flex;
     border-radius: 6px;
-    margin: 0px 3px;
+    margin: 5px;
 
     &__name {
       border-right: 1px solid white;
-      font-weight: 600;
+      font-weight: 500;
     }
 
     &__name,
@@ -286,16 +290,15 @@ ol.progtrckr {
   padding: 15px 0px;
 
   .ab-list__label {
-    flex-basis: 0;
-    flex-grow: 1;
     padding: 0px 15px;
 
     &.label--1 {
-      min-width: 320px;
+      min-width: 200px;
+      width: 200px;
     }
 
     &.label--2 {
-      flex-grow: 2;
+      width: 100%;
     }
 
     &.label--120 {

@@ -1,6 +1,7 @@
 import React from 'react';
 import IosPinOutline from 'react-ionicons/lib/IosPinOutline';
 import IosEyeOutline from 'react-ionicons/lib/IosEyeOutline';
+import _ from 'lodash';
 
 const GmapsLink = ({ lat, lng }) => {
 
@@ -17,12 +18,12 @@ const GmapsLink = ({ lat, lng }) => {
 }
 
 const HospitalListItem = ({ id, name, address, equipment }) => {
-  const displayAddress = (address.locality !== address.municipality) ? `${address.locality}, ${address.municipality}` : address.locality;
+  const displayAddress = (!(_.includes(address.municipality, address.locality))) ? `${address.locality}, ${address.municipality}` : address.locality;
 
   return (
     <div className={`ab-hospitals__list__item ab-hospital`}>
       <div className="ab-hospital__info">
-        <h3 className="ab-hospital__name">{ name }</h3>
+        <h4 className="ab-hospital__name">{ name }</h4>
         <div className="ab-hospital__location">
           <p className="ab-hospital__address">{ displayAddress }</p>
           <GmapsLink {...address.position} />
@@ -42,7 +43,7 @@ const HospitalListItem = ({ id, name, address, equipment }) => {
       </div>
       <button className="ab-hospital__more">
         <IosEyeOutline fontSize="42px" />
-        <span>Покажи</span>
+        <small>Покажи</small>
       </button>
     </div>
   )
