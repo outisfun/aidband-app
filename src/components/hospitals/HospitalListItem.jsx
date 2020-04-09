@@ -20,7 +20,12 @@ const GmapsLink = ({ lat, lng }) => {
 const HospitalListItem = ({ id, name, address, product_sums }) => {
   // don't show municipality if it's the same as the locality
   // for example, no need to say Plovdiv, Plovdiv :)
-  const displayAddress = (!(_.includes(address.municipality, address.locality))) ? `${address.locality}, ${address.municipality}` : address.locality;
+  let displayAddress = "";
+  if (address) {
+    displayAddress = (!(_.includes(address.municipality, address.locality))) ? `${address.locality}, ${address.municipality}` : address.locality;
+  } else {
+    displayAddress = "No Address Specified";
+  }
 
   return (
     <div className={`ab-hospitals__list__item ab-hospital`}>
@@ -32,7 +37,7 @@ const HospitalListItem = ({ id, name, address, product_sums }) => {
         <h4 className="ab-hospital__name">{ name }</h4>
         <div className="ab-hospital__location">
           <p className="ab-hospital__address">{ displayAddress }</p>
-          <GmapsLink {...address.position} />
+          {address ? <GmapsLink {...address?.position} /> : "Coordinates missing"}
         </div>
       </div>
       <div className="ab-hospital__equipment ab-equipment">
