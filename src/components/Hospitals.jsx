@@ -1,8 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { HospitalsContext } from '../providers/HospitalsProvider';
 import SideNav from './layout/SideNav';
-import Container from './layout/Container';
-import HospitalListItem from './hospitals/HospitalListItem';
 import FilterListItem from './hospitals/FilterListItem';
 import { Scrollbars } from 'react-custom-scrollbars';
 import HospitalsMap from './HospitalsMap';
@@ -14,6 +12,7 @@ import _ from 'lodash';
 
 import products from '../utils/products.js'; // replace later
 import municipalities from '../utils/municipalities.js';
+import HospitalsList from './HospitalsList';
 
 
 const Hospitals = () => {
@@ -132,6 +131,7 @@ const Hospitals = () => {
 
         <Tabs onSelect={(val) => {
           }}>
+          
           <div className="ab-tablist">
             <TabList>
               <Tab><IosList className="ab-icon ab-icon--sm" /><small>List</small></Tab>
@@ -140,24 +140,7 @@ const Hospitals = () => {
           </div>
 
           <TabPanel>
-            <div className="ab-hospitals__list">
-              <Container>
-                <div className="ab-hospitals__list__labels">
-                  <h6 className="ab-list__label ab-h6 label--1">
-                    Hospital
-                  </h6>
-                  <h6 className="ab-list__label ab-h6 label--2">
-                    Needs
-                  </h6>
-                  <h6 className="ab-list__label ab-h6 label--120">
-                    Contacts
-                  </h6>
-                </div>
-                { _hospitals && _.filter(_hospitals, { 'isShown': true }).map((hospital, index) => {
-                  return <HospitalListItem {...hospital} key={`hospital--${index}`} />
-                })}
-              </Container>
-            </div>
+            <HospitalsList hospitals={_hospitals} />
           </TabPanel>
           <TabPanel>
             <HospitalsMap hospitals={_.filter(_hospitals, { 'isShown': true })} />

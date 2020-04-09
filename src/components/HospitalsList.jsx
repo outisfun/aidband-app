@@ -1,6 +1,5 @@
 import React from 'react';
 import Container from './layout/Container';
-import IosPinOutline from 'react-ionicons/lib/IosPinOutline';
 import HospitalListItem from './hospitals/HospitalListItem';
 
 import _ from 'lodash';
