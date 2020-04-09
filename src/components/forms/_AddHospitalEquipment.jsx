@@ -1,78 +1,97 @@
 import React, { Component } from 'react';
-import products from '../../utils/products.js'; // replace later
 import _ from 'lodash';
 
+// pull from DB!!!
+const products = [
+  {
+    product_id: 'GOWN',
+    display_name: 'Medical gowns'
+  },
+  {
+    product_id: 'MASK_N95',
+    display_name: 'Medical gowns'
+  },
+  {
+    product_id: 'OVERSHOES',
+    display_name: 'Medical gowns'
+  },
+  {
+    product_id: 'GLOVES',
+    display_name: 'Medical gowns'
+  }
+];
 
 class AddHospitalEquipment extends Component {
 
-  state = {
-    equipment: []
-  }
+  constructor(props) {
+    super(props);
 
-  _validateOnDemand = true;
+    const fields = props.getStore
+    this.state = {
+      ...props.getStore(),
+      isAddressValidated: false
+    };
+
+    this._validateOnDemand = false; // maybe enable later
+
+    this.validationCheck = this.validationCheck.bind(this);
+    this.isValidated = this.isValidated.bind(this);
+  }
 
   validationCheck() {
     if (!this._validateOnDemand)
       return;
-
-    const { name } = this._grabUserInput();
-    this.setState ({ name });
   }
-  validationCheck = this.validationCheck.bind(this);
 
   isValidated() {
-    const { equipment } = this._grabUserInput();
+    const request = this._grabUserInput();
     const { updateStore } = this.props;
 
-    updateStore({ equipment });
+    updateStore({ request });
   }
 
   // grab and process input
   _grabUserInput() {
-    let equipment = [];
+    let request = [];
+
     _.forEach(products, product => {
-      console.log(Number(this.refs[product.id].value));
-      if (Number(this.refs[product.id].value) > 0) {
-        equipment.push({
-          productId: product.id,
-          displayName: product.displayName,
-          amount: Number(this.refs[product.id].value)
+      console.log(Number(this.refs[product.product_id].value));
+      if (Number(this.refs[product.product_id].value) > 0) {
+        request.push({
+          product_id: product.product_id,
+          count_requested: Number(this.refs[product.product_id].value)
         })
       }
     });
 
-    return { equipment };
+    return request;
   }
 
   // for each product,
   // generate a new field that asks for
-  // number(necessity). availability na po-kysen etap
+  // number(necessity). availability later
 
   render() {
-
+    console.log('state', this.state);
     return (
       <div className="ab-form__step">
         <form className="ab-form">
           { products && products.map((product, index) => {
-            let { id, displayName, amountType, units } = product;
-            if (!units) { units = "бр." }
+            let { product_id, display_name } = product;
             return (
               <div className="ab-form__group" key={`product--${index}`}>
 
                 <div className="ab-form__field field--units">
                   <label className="ab-form__label">
-                    { displayName }
+                    { display_name }
                   </label>
                   <div className="field-wrapper">
                     <input
-                      ref={id}
+                      ref={product_id}
                       autoComplete="off"
                       type="number"
                       placeholder='amount'
                       defaultValue={0} />
-                    <span className="units">
-                      { units }
-                    </span>
                   </div>
                 </div>
               </div>

@@ -1,13 +1,7 @@
 import React, { Component } from 'react';
-import LocationPicker from 'react-location-picker';
 import NodeGeocoder from 'node-geocoder';
 import Geocode from "react-geocode";
 import _ from 'lodash';
-
-const defaultPosition = {
-  lat: 42.149210,
-  lng: 24.749080
-};
 
 const options = {
   provider: 'google',
@@ -15,207 +9,241 @@ const options = {
   apiKey: 'AIzaSyDymEQyulbBI8LiqGfJ9YKzLUo4jNIjcW0'
 };
 
-
-
-// set Google Maps Geocoding API for purposes of quota management. Its optional but recommended.
 Geocode.setApiKey(options.apiKey);
-
-// set response language. Defaults to english.
 Geocode.setLanguage("bg");
-
-// set response region. Its optional.
-// A Geocoding request with region=es (Spain) will return the Spanish locality.
 Geocode.setRegion("bg");
+// Geocode.enableDebug();
 
-// Enable or disable logs. Its optional.
-Geocode.enableDebug();
+const FormGroup = ({ label, children }) => {
+  return (
+    <div className="ab-form__group">
+      <label className="ab-form__label">
+        {label}
+      </label>
+      <div className="ab-form__field">
+        {children}
+      </div>
+    </div>
+  )
+}
 
 class AddHospitalDetails extends Component {
 
-  state = {
-    name: '',
-    address: {
-      locality: '',
-      municipality: '',
-      formattedAddress: '',
-      position: {
-        lat: 0,
-        lng: 0
-      }
-    }
+  constructor(props) {
+    super(props);
+
+    const fields = props.getStore
+    this.state = {
+      ...props.getStore(),
+      isAddressValidated: false
+    };
+
+    this._validateOnDemand = true; // this flag enables onBlur validation as user fills forms
+
+    this.validationCheck = this.validationCheck.bind(this);
+    this.isValidated = this.isValidated.bind(this);
+    this.validateAddress = this.validateAddress.bind(this);
   }
 
-  _validateOnDemand = true;
+  componentDidMount() {
+    const { getStore } = this.props;
+    const { hospital, contact } = getStore();
+    this.setState({ hospital, contact });
+  }
 
   validationCheck() {
     if (!this._validateOnDemand)
       return;
 
-    const { name } = this._grabUserInput();
-    this.setState ({ name });
-  }
-  validationCheck = this.validationCheck.bind(this);
+    const userInput = this._grabUserInput();
+    const validateNewInput = this._validateData(userInput);
 
+    let _state = this.state;
+    _state.contacts[0] = userInput.contact;
+
+    this.setState(_state);
+  }
+
+
+  // it's run on step submit, so this is where
+  // the store in AddHospital gets updated.
   isValidated() {
-    const { address } = this._grabUserInput();
-    const { updateStore } = this.props;
+    // FIX THIS
+    return new Promise((resolve, reject) => {
+      // should also be validating title though.
+      const _onAddressGeocode = () => {
 
-    // before updating store, we need to geocode the address
-    const onStepSubmit = ({ name, address }) => {
-      updateStore({ name, address });
-      return true;
-    }
+        if (this.state.isAddressValidated) {
+          const { updateStore } = this.props;
+          const { name, address, contacts } = this.state;
+          updateStore({ name, address, contacts });
 
-    let _address = this._geocode(address, onStepSubmit);
+          resolve();
+        } else {
+          reject();
+        }
+      };
+
+      this._geocodeAddress(_onAddressGeocode);
+    });
   }
 
-  // grab and process input
   _grabUserInput() {
     return {
       name: this.refs.name.value,
-      address: this.refs.address.value
+      address: this.refs.address.value,
+      contact: {
+        name: this.refs.contact_name.value,
+        position: this.refs.contact_position.value,
+        phone: this.refs.contact_phone.value,
+        email: this.refs.contact_email.value
+      }
     };
   }
 
-  _geocode = (address, callback) => {
-    const { name } = this.state;
-    Geocode.fromAddress(address).then(
-      response => {
-        const res = response.results[0];
-        const { lat, lng } = res.geometry.location;
-        const formattedAddress = res.formatted_address;
-        let locality = '';
-        let municipality = '';
-
-        console.log('res be', res);
-
-        _.forEach(res.address_components, (comp) => {
-          if (_.includes(comp.types, "locality")) {
-            locality = comp.short_name;
-          }
-          if (_.includes(comp.types, "administrative_area_level_1")) {
-            municipality = comp.short_name;
-          }
-        })
-
-        const address = {
-          locality: locality,
-          municipality: municipality,
-          formattedAddress: formattedAddress,
-          position: { lat, lng }
-        }
-
-        callback({ name, address });
-      },
-      error => {
-        console.error(error);
-      }
-    );
+  _validateData(data) {
+    return {
+      name: (data.name !== ''), // required: anything besides N/A
+      address: this.state.isAddressValidated // not sure
+    };
   }
 
+  // Geocodes user input address ->
+  // Sets state!!! -> accepts callback for once state is set.
+  _geocodeAddress = (callback) => {
 
-  _updateAddress = (e) => {
-    e.preventDefault();
-    // const { address } = this.state;
     const { address } = this._grabUserInput();
-    // const res = await geocoder.geocode('29 champs elysée paris');
-    Geocode.fromAddress(address).then(
-      response => {
-        const res = response.results[0];
-        const { lat, lng } = res.geometry.location;
-        const formattedAddress = res.formatted_address;
-        let locality = '';
-        let municipality = '';
+    if (address) {
+      Geocode.fromAddress(address).then(
+        response => {
+          const res = response.results[0];
+          const { lat, lng } = res.geometry.location;
+          const formattedAddress = res.formatted_address;
+          let locality = '';
+          let municipality = '';
 
-        _.forEach(res.address_components, (comp) => {
-          if (_.includes(comp.types, "locality")) {
-            locality = comp.short_name;
-          }
-          if (_.includes(comp.types, "administrative_area_level_1")) {
-            municipality = comp.short_name;
-          }
-        })
+          _.forEach(res.address_components, (comp) => {
+            if (_.includes(comp.types, "locality")) {
+              locality = comp.short_name;
+            }
+            if (_.includes(comp.types, "administrative_area_level_1")) {
+              municipality = comp.short_name;
+            }
+          })
 
-        const address = {
-          locality: locality,
-          formattedAddress: formattedAddress,
-          position: { lat, lng }
+          // FIX THIS !!!!!!!
+          let _state = this.state;
+          const { name } = this._grabUserInput();
+          _state.address = {
+            locality: locality,
+            municipality: municipality,
+            formatted_address: formattedAddress,
+            position: { lat, lng }
+          }
+          _state.name = name;
+          _state.isAddressValidated = true;
+          this.setState(_state, callback);
+        },
+        error => {
+          // if no response, set state to not valid address to prevent submit
+          this.setState({ isAddressValidated: false });
+          console.error(error);
         }
-
-        this.setState({ address });
-      },
-      error => {
-        console.error(error);
-      }
-    );
-
-    // console.log('address', res);
+      );
+    }
   }
-  updateAddress = this._updateAddress.bind(this);
+
+
+  validateAddress = (e) => {
+    e.preventDefault();
+    this._geocodeAddress();
+  }
 
   render() {
-    const { formattedAddress, locality, position } = this.state.address;
+    const { name, address, contacts, isAddressValidated } = this.state;
+    const { getStore } = this.props;
+    const cls = isAddressValidated ? '' : 'cannot-submit';
 
     return (
-      <div className="ab-form__step">
+      <div className={`ab-form__step ${cls}`}>
+
         <form className="ab-form">
+          {/* Hospital name, description, address */}
+          <FormGroup label="Name">
+            <input
+              ref="name"
+              type="text"
+              placeholder='Name'
+              required
+              defaultValue={ name }
+              onBlur={this.validationCheck} />
+          </FormGroup>
 
-          <div className="ab-form__group">
-            <label className="ab-form__label">
-              Име
-            </label>
-            <div className="ab-form__field">
-              <input
-                ref="name"
-                autoComplete="off"
-                type="text"
-                placeholder='Име'
-                required
-                defaultValue={this.state.name}
-                onBlur={this.validationCheck} />
-            </div>
-          </div>
+          <FormGroup label="Address">
+            <input
+              ref="address"
+              autoComplete="off"
+              type="text"
+              placeholder='Address'
+              required
+              onBlur={this.validateAddress} />
 
-          <div className="ab-form__group">
-            <label className="ab-form__label">
-              Адрес
-            </label>
-            <div className="ab-form__field field--validate">
-              <div className="wrapper">
-                <input
-                  ref="address"
-                  autoComplete="off"
-                  type="text"
-                  placeholder='Адрес'
-                  required
-                  defaultValue={this.state.address.formattedAddress}
-                  onBlur={this.updateAddress} />
+            <button
+              className="address-validate ab-button ab-button--sm ab-button--default"
+              onClick={this.validateAddress} >Валидирай адрес</button>
 
-                <button
-                  className="address-validate ab-button ab-button--sm ab-button--default"
-                  onClick={this.updateAddress} >Валидирай адрес</button>
-              </div>
+            {this.state.isAddressValidated &&
+              <div className="address-preview">
+                <h6>Result</h6>
 
-              { formattedAddress &&
-                <div className="ab-form__field__output">
-                  <h6>Result</h6>
-
-                  <div className="ab-form__field__output__item">
-                    <h6>Форматиран адрес: </h6>
-                    <p>{ formattedAddress }</p>
-                  </div>
-                  <div className="ab-form__field__output__item">
-                    <h6>Населено място: </h6>
-                    <p>{ locality }</p>
-                  </div>
-                  <div className="ab-form__field__output__item">
-                    <h6>Географска позиция: </h6>
-                    <p>Lat: { position.lat }, Lng: { position.lng }</p>
-                  </div>
+                <div className="ab-form__field__output__item">
+                  <h6>formatted_address: </h6>
+                  <p>{ address && address.formatted_address}</p>
                 </div>
-              }
-            </div>
-          </div>
+                <div className="ab-form__field__output__item">
+                  <h6>locality: </h6>
+                  <p>{ address && address.locality}</p>
+                </div>
+                <div className="ab-form__field__output__item">
+                  <h6>municipality: </h6>
+                  <p>{ address && address.municipality}</p>
+                </div>
+                <div className="ab-form__field__output__item">
+                  <h6>position: </h6>
+                  <p>{ address && address.position.lat } { address && address.position.lng }</p>
+                </div>
+              </div>}
+          </FormGroup>
+
+          <h6>Contact person</h6>
+          <FormGroup label="Name">
+            <input
+              ref="contact_name"
+              type="text"
+              placeholder='Name'
+              onBlur={this.validationCheck} />
+          </FormGroup>
+          <FormGroup label="Position">
+            <input
+              ref="contact_position"
+              type="text"
+              placeholder='Position'
+              onBlur={this.validationCheck} />
+          </FormGroup>
+          <FormGroup label="Email">
+            <input
+              ref="contact_email"
+              type="text"
+              placeholder='Email'
+              onBlur={this.validationCheck} />
+          </FormGroup>
+          <FormGroup label="Phone number">
+            <input
+              ref="contact_phone"
+              type="text"
+              placeholder='Phone'
+              onBlur={this.validationCheck} />
+          </FormGroup>
         </form>
       </div>
     )
@@ -229,13 +257,39 @@ export default AddHospitalDetails;
             <label className="ab-form__label">
               Адрес
             </label>
-            <div className="ab-form__field">
-              <LocationPicker
-                containerElement={ <div className = "ab-add-map--container" /> }
-                mapElement={ <div className = "ab-add-map" /> }
-                defaultPosition={defaultPosition}
-                zoom={12}
-                onChange={this.handleLocationChange} />
+            <div className="ab-form__field field--validate">
+              <div className="wrapper">
+                <input
+                  ref="address"
+                  autoComplete="off"
+                  type="text"
+                  placeholder='Адрес'
+                  required
+                  defaultValue={'null'}
+                  onBlur={this.updateAddress} />
+
+                <button
+                  className="address-validate ab-button ab-button--sm ab-button--default"
+                  onClick={this.updateAddress} >Валидирай адрес</button>
+              </div>
+
+              { this.state.hospital && this.state.hospital.address.formattedAddress &&
+                <div className="ab-form__field__output">
+                  <h6>Result</h6>
+
+                  <div className="ab-form__field__output__item">
+                    <h6>Форматиран адрес: </h6>
+                    <p></p>
+                  </div>
+                  <div className="ab-form__field__output__item">
+                    <h6>Населено място: </h6>
+                    <p></p>
+                  </div>
+                  <div className="ab-form__field__output__item">
+                    <h6>Географска позиция: </h6>
+                    <p></p>
+                  </div>
+                </div>
+              }
             </div>
-          </div>
-          */
+          </div> */

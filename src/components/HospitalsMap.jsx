@@ -1,7 +1,4 @@
 import React, { Component } from 'react';
-import { HospitalsContext } from '../providers/HospitalsProvider';
-import SideNav from './layout/SideNav';
-import Container from './layout/Container';
 
 import HospitalListItem from './hospitals/HospitalListItem';
 import FilterListItem from './hospitals/FilterListItem';

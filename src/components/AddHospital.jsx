@@ -9,25 +9,55 @@ import AddHospitalDetails from './forms/_AddHospitalDetails';
 import AddHospitalEquipment from './forms/_AddHospitalEquipment';
 import AddHospitalThankYou from './forms/_AddHospitalThankYou';
 
+const fields_contact = {
+  name: 'Д-р Куин',
+  position: 'Шеф на ДКЦ',
+  phone_numbers: [],
+  emails: [],
+  is_public_contact: true, // set by admin manually?
+}
 
-const defVals = {
-  name: '',
-  address: {
-    locality: '',
-    formattedAddress: '',
-    position: {
-      lat: 0,
-      lng: 0
-    }
-  },
-  contact: [
+const fields_request = {
+  hospital_id: '',
+  created_date: null, // timestamp
+  created_by: fields_contact,
+  status: 'PENDING',
+  products: [
     {
-      name: '',
-      email: '',
-      phoneNumber: ''
+      product_id: 'GOWN',
+      count_requested: 5
     }
-  ],
-  equipment: []
+  ]
+}
+
+const fields_address = {
+  formatted_address: '',
+  locality: '',
+  municipality: '',
+  position: {
+    lat: 0,
+    lng: 0
+  }
+}
+
+const fields_timestamp = {
+  created_by: '',
+  created_date: null, // normal timestamp
+  modified_by: '',
+  modified_date: null, // normal timestamp
+  modified_reason: 'INITIAL_INSERT'
+}
+
+const fields_hospital = {
+  name: null,
+  description: null,
+  address: fields_address,
+
+  // store sums for convenience to avoid extra requests
+  product_sums: [],
+
+  contacts: [ fields_contact ], // COLLECTION
+  timestamp: fields_timestamp // COLLECTION
 }
 
 class AddHospital extends Component {
@@ -37,7 +67,10 @@ class AddHospital extends Component {
     currentStep: null
   }
 
-  sampleStore = defVals;
+  sampleStore = {
+    ...fields_hospital,
+    request: fields_request
+  }
   hasUploaded = false;
 
   getStore() {
@@ -45,7 +78,6 @@ class AddHospital extends Component {
   }
 
   updateStore(update) {
-    console.log('we get update ', update);
     this.sampleStore = {
       ...this.sampleStore,
       ...update,
@@ -53,13 +85,48 @@ class AddHospital extends Component {
   }
 
   uploadToFB() {
-    const hospital = this.sampleStore;
+
+    let { name, description, address, product_sums, contacts, timestamp, request } = this.sampleStore;
+
+    // replace later, as hospitals have profiles and can make multiple requests
+    request.map(product => {
+      product_sums.push({
+        product_id: product.product_id,
+        sum_requested: product.count_requested,
+        sum_received: 0 // for now.
+      });
+    });
+
+    timestamp = {
+      created_by: 'admin@aidbind.com',
+      created_date: new Date(),
+      modified_by: '',
+      modified_date: null, // normal timestamp
+      modified_reason: 'INITIAL_INSERT'
+    };
+
+    const hospital = { name, description, address, product_sums, contacts, timestamp };
+
+
 
     firestore.collection('hospitals')
       .add(hospital)
       .then((docRef) => {
-        console.log('hospital added!');
-        // this.setState({ id: docRef.id });
+        const id = docRef.id;
+        // now add request
+        let _request = {
+          products: request, // rename!
+          hospital_id: id,
+          created_date: new Date(),
+          created_by: contacts[0]
+        }
+
+        console.log(_request);
+        firestore.collection('requests')
+          .add(_request)
+          .then(_docRef => {
+            console.log('added request');
+          })
       })
       .catch(function(error) {
         console.error("Error adding document: ", error);
@@ -101,7 +168,6 @@ class AddHospital extends Component {
             prevBtnOnLastStep={false}
             stepsNavigation={false}
             onStepChange={step => {
-                console.log('step change to ', step);
                 this.setState({ currentStep: step });
                 window.sessionStorage.setItem("step", step);
 

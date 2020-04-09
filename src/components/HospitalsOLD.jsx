@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { HospitalsContext } from '../providers/HospitalsProvider';
 import SideNav from './layout/SideNav';
 import Container from './layout/Container';
@@ -19,12 +19,15 @@ import municipalities from '../utils/municipalities.js';
 const Hospitals = () => {
 
   const hospitals = useContext(HospitalsContext);
-  console.log(hospitals);
 
   const [currentHospitals, setCurrentHospitals] = useState([]);
   const [filters, setFilters] = useState([]);
   const [currentMunicipalities, setMunicipalities] = useState([]);
 
+  useEffect(() => {
+    // Update the document title using the browser API
+    console.log('use effect');
+  });
 
   const toggleFilter = (filter) => {
     let _filters = filters;
@@ -38,12 +41,14 @@ const Hospitals = () => {
 
   const toggleMunicipality = (municipality) => {
     let _municipalities = currentMunicipalities;
+    console.log('filter', municipality, currentMunicipalities);
 
     if (!(_.includes(_municipalities, municipality))) {
       _municipalities.push(municipality);
     } else {
       _.pull(_municipalities, municipality);
     }
+    console.log(municipality, _municipalities);
     setMunicipalities([..._municipalities]);
   }
 
@@ -53,6 +58,7 @@ const Hospitals = () => {
 
   let _hospitals = hospitals ? [...hospitals] : null;
 
+
   _.forEach(_hospitals, hospital => {
 
     let __onLocation = true;
@@ -60,6 +66,8 @@ const Hospitals = () => {
 
     if (filters.length) {
       __onEquipment = false;
+
+      console.log('whaat', _hospitals, hospital, hospital && hospital.equipment);
       if (hospital) {
           _.forEach(hospital.equipment, (item) => {
           if (_.includes(filters, item.productId)) {
@@ -112,7 +120,7 @@ const Hospitals = () => {
             </div>
 
             <div className="ab-filter--products ab-filter__group">
-              <h6 className="ab-filter__group__title">Municipalities</h6>
+              <h6 className="ab-filter__group__title">Области</h6>
               { municipalities && municipalities.map((municipality, index) => {
                 const onClick = () => { toggleMunicipality(municipality); };
                 const cls = (_.includes(currentMunicipalities, municipality)) ? 'is--active' : '';

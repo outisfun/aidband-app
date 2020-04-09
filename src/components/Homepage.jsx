@@ -1,11 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import Container from './layout/Container';
 
 import { Scrollbars } from 'react-custom-scrollbars';
 import HospitalsMap from './HospitalsMap';
 import IosArrowRoundForward from 'react-ionicons/lib/IosArrowRoundForward';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 import _ from 'lodash';
 import products from '../utils/products.js'; // replace later
