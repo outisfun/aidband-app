@@ -4,6 +4,8 @@ import Geocode from 'react-geocode';
 import { formatGeocoderResponse } from '../../utils/tools.js';
 import _ from 'lodash';
 
+import Icon from '../../assets/icons/products.jsx';
+
 const options = {
   provider: 'google',
   httpAdapter: 'https', // Default
@@ -26,6 +28,12 @@ const FormGroup = ({ label, valCls, valMsg, children }) => {
       </div>
       <span className="error-message">{valMsg}</span>
     </div>
+  )
+}
+
+const ProductIcon = () => {
+  return (
+    <Icon name='faceshield' />
   )
 }
 
@@ -183,7 +191,7 @@ class AddHospitalDetails extends Component {
 
     return (
       <div className={`ab-form__step ${cls}`}>
-
+        <ProductIcon />
         <form className="ab-form">
           {/* Hospital name, description, address */}
           <FormGroup
