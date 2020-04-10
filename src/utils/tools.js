@@ -13,6 +13,15 @@ export const getDocRef = (collectionId, docId) => {
 
 export const formatGeocoderResponse = (response) => {
   const res = response.results[0];
+  console.log('res', res);
+  if (res.geometry.location_type === 'APPROXIMATE') {
+    // maybe they entered a city or something,
+    // and not a precise address
+    return {
+      address: res.formatted_address,
+      status: 'APPROXIMATE'
+    }
+  }
   const { lat, lng } = res.geometry.location;
   const formatted_address = res.formatted_address;
   let locality = '';

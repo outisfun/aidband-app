@@ -99,6 +99,7 @@ class AddHospital extends Component {
   }
 
   updateStore(update) {
+    console.log('update ', update);
     this.sampleStore = {
       ...this.sampleStore,
       ...update,
