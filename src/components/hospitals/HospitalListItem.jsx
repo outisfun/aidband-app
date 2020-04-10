@@ -1,7 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import IosPinOutline from 'react-ionicons/lib/IosPinOutline';
 import IosEyeOutline from 'react-ionicons/lib/IosEyeOutline';
 import _ from 'lodash';
+import { ProductsContext } from '../../providers/ProductsProvider';
+import Icon from '../elements/Icon';
+
+const lang = 'en';
 
 const GmapsLink = ({ lat, lng }) => {
   const href=`https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
@@ -18,6 +22,7 @@ const GmapsLink = ({ lat, lng }) => {
 const HospitalListItem = ({ id, hospital_name, address, product_sums, isShown }) => {
   // don't show municipality if it's the same as the locality
   // for example, no need to say Plovdiv, Plovdiv :)
+
   let displayAddress = "";
   if (address) {
     displayAddress = (!(_.includes(address.municipality, address.locality))) ? `${address.locality}, ${address.municipality}` : address.locality;
@@ -26,29 +31,28 @@ const HospitalListItem = ({ id, hospital_name, address, product_sums, isShown })
   }
 
   const cls = isShown ? 'is--visible' : ''; // hidden by default, unless isShown is true
-
+  const products = useContext(ProductsContext);
+  console.log('hospital address', address);
   return (
     <div className={`ab-hospitals__list__item ab-hospital ${cls}`}>
 
       <div className="ab-hospital__info">
-        <div className="sorts">
-          <span className="name">{hospital_name}</span>
-          <span className="number">{hospital_name && hospital_name.length}</span>
-        </div>
         <h4 className="ab-hospital__name">{ hospital_name }</h4>
         <div className="ab-hospital__location">
-          <p className="ab-hospital__address">{ displayAddress }</p>
-          {address ? <GmapsLink {...address?.position} /> : "Coordinates missing"}
+          <small className="ab-hospital__address ab-address">{ displayAddress }</small>
+          {address ? <GmapsLink {...address.position} /> : "Coordinates missing"}
         </div>
       </div>
-      <div className="ab-hospital__equipment ab-equipment">
-        {
-          product_sums && product_sums.map((product, index) => {
-            return (
-              <div className="ab-equipment__item" key={`item--${id}--${index}`}>
-                <span className="ab-equipment__item__name">{product.product_id}</span>
-                <span className="ab-equipment__item__amount">{product.sum_requested}</span>
 
+      <div className="ab-hospital__products">
+        {
+          (product_sums && products) && product_sums.map((product, index) => {
+            // const _product = products[product.product_id]; // match to official product record
+            const _product = _.find(products, { 'id': product.product_id });
+            return (
+              <div className="ab-hospital__product" key={`item--${id}--${index}`}>
+                <Icon name={product.product_id} />
+                <span className="ab-hospital__product__amount">{product.sum_requested}</span>
               </div>
             )
           })

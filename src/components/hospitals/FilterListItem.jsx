@@ -2,7 +2,6 @@ import React from 'react';
 import Icon from '../elements/Icon';
 
 const FilterListItem = ({ text, cls, onClick, iconName }) => {
-  console.log(iconName);
   return (
     <button
       className={`ab-filter__item ${cls}`}

@@ -1,0 +1,100 @@
+.ab-hospitals__list__labels {
+  display: flex;
+  align-items: center;
+  padding: 15px 0px;
+
+  .ab-list__label {
+    padding: 0px 15px;
+
+    &.label--1 {
+      min-width: 240px;
+      width: 240px;
+    }
+
+    &.label--2 {
+      width: 100%;
+    }
+  }
+}
+
+.ab-hospitals__list__item {
+  height: $h--xxl;
+  background-color: white;
+  width: 100%;
+  display: flex;
+  margin-bottom: 15px;
+  border-radius: 6px;
+  position: relative;
+
+  /* stupid workaround until better filters are implemented */
+  opacity: 0;
+  max-height: 0px;
+  overflow: hidden;
+
+  &.is--visible {
+    opacity: 1;
+    max-height: 300px;
+  }
+
+  .ab-hospital__info,
+  .ab-hospital__products {
+    padding: 15px;
+  }
+
+  .ab-hospital__info {
+    width: 240px;
+    min-width: 240px;
+    border-right: 2px solid $ab--lightgrey;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .ab-hospital__location {
+      /*position: absolute;
+      bottom: 0;*/
+      .ab-hospital__address {
+        color: $ab--grey;
+        margin-bottom: $h--xs;
+      }
+    }
+  }
+
+  .ab-hospital__name {
+    margin-bottom: $h--xs;
+  }
+
+
+
+  .ab-hospital__products {
+    /*width: 800px;
+    min-width: 800px;*/
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .ab-link {
+    display: flex;
+    align-items: center;
+  }
+
+  .ab-hospital__more {
+    display: none;
+    width: 120px;
+    max-width: 120px;
+    min-width: 120px;
+    border: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: $ab--accent;
+    font-weight: 600;
+
+    svg {
+      fill: $ab--accent;
+    }
+
+    display: none;
+  }
+}

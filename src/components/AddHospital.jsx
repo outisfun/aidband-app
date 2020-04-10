@@ -85,13 +85,7 @@ const fields_hospital = {
   // however, to more easily access the sums of all requests
   // for a certain product, for example gowns,
   // they are stored here too.
-  product_sums: [
-    {
-      product_id: 'GOWN',
-      sum_requested: 50,
-      sum_delivered: 0 // later
-    }, // ...etc
-  ],
+  product_sums: [],
 
   // COLLECTION => accessible by a second db request
   contacts: [], // fields_contact
