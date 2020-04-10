@@ -14,7 +14,6 @@ class ProductsProvider extends Component {
   componentDidMount = async () => {
     this.unsubscribeFromFirestore = firestore.collection('products').onSnapshot(snapshot => {
       const products = snapshot.docs.map(collectIdsAndDocs);
-      console.log('my products', products, snapshot.docs);
       this.setState({ products });
     });
   }

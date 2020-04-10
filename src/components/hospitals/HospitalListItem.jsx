@@ -25,10 +25,11 @@ const HospitalListItem = ({ id, hospital_name, address, product_sums, isShown })
     displayAddress = "No Address Specified";
   }
 
-  const cls = isShown ? 'is--visible' : 'is--hidden';
+  const cls = isShown ? 'is--visible' : ''; // hidden by default, unless isShown is true
 
   return (
     <div className={`ab-hospitals__list__item ab-hospital ${cls}`}>
+
       <div className="ab-hospital__info">
         <div className="sorts">
           <span className="name">{hospital_name}</span>

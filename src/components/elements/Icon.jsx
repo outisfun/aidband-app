@@ -122,6 +122,9 @@ const Icon = ({ name }) => {
     case 'LUNGS':
       IconComponent = Icon_Lungs;
       break;
+    case 'GLASSES':
+      IconComponent = Icon_Glasses;
+      break;
     default:
       break;
   }
