@@ -13,7 +13,7 @@ class HospitalsProvider extends Component {
 
   componentDidMount = async () => {
     this.unsubscribeFromFirestore = firestore.collection('hospitals').onSnapshot(snapshot => {
-      let hospitals = snapshot.docs.map(collectIdsAndDocs);
+      const hospitals = snapshot.docs.map(collectIdsAndDocs);
       this.setState({ hospitals });
     });
   }

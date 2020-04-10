@@ -4,9 +4,7 @@ import IosEyeOutline from 'react-ionicons/lib/IosEyeOutline';
 import _ from 'lodash';
 
 const GmapsLink = ({ lat, lng }) => {
-
   const href=`https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
-
   return (
     <a target="_blank"
         className="ab-link ab-link--external"
@@ -17,7 +15,7 @@ const GmapsLink = ({ lat, lng }) => {
   )
 }
 
-const HospitalListItem = ({ id, name, address, product_sums }) => {
+const HospitalListItem = ({ id, name, address, product_sums, isShown }) => {
   // don't show municipality if it's the same as the locality
   // for example, no need to say Plovdiv, Plovdiv :)
   let displayAddress = "";
@@ -27,8 +25,10 @@ const HospitalListItem = ({ id, name, address, product_sums }) => {
     displayAddress = "No Address Specified";
   }
 
+  const cls = isShown ? 'is--visible' : 'is--hidden';
+
   return (
-    <div className={`ab-hospitals__list__item ab-hospital`}>
+    <div className={`ab-hospitals__list__item ab-hospital ${cls}`}>
       <div className="ab-hospital__info">
         <div className="sorts">
           <span className="name">{name}</span>

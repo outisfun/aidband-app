@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { HospitalsContext } from '../providers/HospitalsProvider';
+import { ProductsContext } from '../providers/ProductsProvider';
 import SideNav from './layout/SideNav';
 import FilterListItem from './hospitals/FilterListItem';
 import { Scrollbars } from 'react-custom-scrollbars';
@@ -10,20 +11,22 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 import _ from 'lodash';
 
-import products from '../utils/products.js'; // replace later
+
+
+//import products from '../utils/products.js'; // replace later
 import municipalities from '../utils/municipalities.js';
 import HospitalsList from './HospitalsList';
+
+const lang = 'en'; // switcher later
 
 
 const Hospitals = () => {
 
   const hospitals = useContext(HospitalsContext);
-  console.log(hospitals);
+  const products = useContext(ProductsContext);
 
-  const [currentHospitals, setCurrentHospitals] = useState([]);
   const [filters, setFilters] = useState([]);
   const [currentMunicipalities, setMunicipalities] = useState([]);
-
 
   const toggleFilter = (filter) => {
     let _filters = filters;
@@ -46,76 +49,68 @@ const Hospitals = () => {
     setMunicipalities([..._municipalities]);
   }
 
-  // hospitals && setCurrentHospitals([...hospitals]);
-
-
-
   let _hospitals = hospitals ? [...hospitals] : null;
 
   _.forEach(_hospitals, hospital => {
+    let _onLocation = true;
+    let _onEquipment = true; // display by default
 
-    let __onLocation = true;
-    let __onEquipment = true; // display by default
+    console.log(hospital);
 
     if (filters.length) {
-      __onEquipment = false;
-      if (hospital) {
-          _.forEach(hospital.equipment, (item) => {
-          if (_.includes(filters, item.productId)) {
-            __onEquipment = true;
-          }
-        });
-      }
-
+      _onEquipment = false;
+      const { product_sums } = hospital;
+      _.forEach(product_sums, product => {
+        if (_.includes(filters, product.product_id)) {
+          _onEquipment = true;
+        }
+      });
     }
 
     if (currentMunicipalities.length) {
-      __onLocation = false;
+      _onLocation = false;
+      if (_.includes(currentMunicipalities, hospital.address.municipality)) {
+        _onLocation = true;
+      }
 
-      if (hospital) {
-        if (_.includes(currentMunicipalities, hospital.address.municipality)) {
-          __onLocation = true;
-        }
-
-        if (_.includes(currentMunicipalities, "София") && _.includes(hospital.address.municipality, "София")) {
-          __onLocation = true;
-        }
+      // workaround for differences between geocoder exported address and municipalities' names
+      if (_.includes(currentMunicipalities, "София") && _.includes(hospital.address.municipality, "София")) {
+        _onLocation = true;
       }
     }
-
-    const isShown = (__onLocation && __onEquipment);
-
-    hospital.isShown = isShown;
+    hospital.isShown = (_onLocation && _onEquipment);
   });
 
+  console.log('hospitals', filters);
+  /*  */
   return (
 
     <div className="ab-hospitals has--sidenav">
       <SideNav>
         <Scrollbars style={{ height: (window.innerHeight - 90) }}>
           <div className="ab-hospitals__filters ab-filters">
-            <div className="ab-filter--products ab-filter__group">
+            <div className="ab-filter__group ab-filter--products">
               <h6 className="ab-filter__group__title">Products</h6>
               { products && products.map((product, index) => {
                 const onClick = () => { toggleFilter(product.id); };
-                const cls = (_.includes(filters, product.id)) ? 'is--active' : '';
-
+                const cls = (_.includes(filters, product.id)) ? 'is--active has--icon' : 'has--icon';
+                const { display_name } = product;
                 return (
                   <FilterListItem
                     key={`filter--${product.id}`}
                     cls={cls}
-                    text={product.displayName}
+                    iconName={product.id}
+                    text={display_name[lang]}
                     onClick={onClick} />
                 )
               })}
             </div>
 
-            <div className="ab-filter--products ab-filter__group">
+            <div className="ab-filter__group ab-filter--products">
               <h6 className="ab-filter__group__title">Municipalities</h6>
               { municipalities && municipalities.map((municipality, index) => {
                 const onClick = () => { toggleMunicipality(municipality); };
                 const cls = (_.includes(currentMunicipalities, municipality)) ? 'is--active' : '';
-
                 return (
                   <FilterListItem
                     key={`filter--${municipality}`}
@@ -131,7 +126,7 @@ const Hospitals = () => {
 
         <Tabs onSelect={(val) => {
           }}>
-          
+
           <div className="ab-tablist">
             <TabList>
               <Tab><IosList className="ab-icon ab-icon--sm" /><small>List</small></Tab>
