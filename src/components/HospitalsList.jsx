@@ -16,9 +16,6 @@ const HospitalsList = ({ hospitals }) =>  {
           <h6 className="ab-list__label ab-h6 label--2">
             Needs
           </h6>
-          <h6 className="ab-list__label ab-h6 label--120">
-            Contacts
-          </h6>
         </div>
         <div className="ab-hospitals__list--inner">
           { hospitals && hospitals.map((hospital, index) => {

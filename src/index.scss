@@ -3,6 +3,7 @@
 @import 'scss/buttons';
 @import 'scss/filters';
 @import 'scss/map';
+@import 'scss/hospitals';
 
 .ab-header {
   height: $h--lg;
@@ -192,137 +193,23 @@ ol.progtrckr {
   padding: 30px;
 }
 
-.ab-hospitals__list__item {
-  height: $h--xl;
-  background-color: white;
-  width: 100%;
+
+
+
+.ab-products {
   display: flex;
-  margin-bottom: 15px;
-
-  /* stupid workaround until better filters are implemented */
-  opacity: 0;
-  max-height: 0px;
-  overflow: hidden;
-
-  &.is--visible {
-    opacity: 1;
-    max-height: 300px;
-  }
-
-  .ab-hospital__info {
-    width: 200px;
-    min-width: 200px;
-  }
-
-  .ab-hospital__equipment {
-    /*width: 800px;
-    min-width: 800px;*/
-    width: 100%;
-    flex-wrap: wrap;
-  }
-
-  .ab-hospital__more {
-    width: 120px;
-    max-width: 120px;
-    min-width: 120px;
-    border: none;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: $ab--accent;
-    font-weight: 600;
-
-    svg {
-      fill: $ab--accent;
-    }
-  }
 }
 
-
-.ab-hospital__info,
-.ab-hospital__equipment {
-  padding: 15px;
-  border-right: 2px solid $ab--lightgrey;
-}
-
-.ab-equipment {
-  display: flex;
-
-  &__item {
-    height: $h--sm;
-    background-color: $ab--lightgrey;
-    display: flex;
-    border-radius: 6px;
-    margin: 5px;
-
-    &__name {
-      border-right: 1px solid white;
-      font-weight: 500;
-    }
-
-    &__name,
-    &__amount {
-      display: block;
-      margin: 0px;
-      padding: 5px 15px;
-      display: flex;
-      align-items: center;
-    }
-  }
-}
-
-.ab-hospitals__list__item {
-
-  .ab-hospital__name {
-    margin-bottom: $h--xs;
-  }
-
-  .ab-hospital__location {
-    .ab-hospital__address {
-      color: $ab--grey;
-      margin-bottom: $h--xs;
-    }
-  }
-
-  .ab-link {
-    display: flex;
-    align-items: center;
-  }
-}
 
 .ab-h6 {
   color: $ab--grey;
   font-weight: 500;
 }
 
-.ab-hospitals__list__labels {
-  display: flex;
-  align-items: center;
-  padding: 15px 0px;
 
-  .ab-list__label {
-    padding: 0px 15px;
-
-    &.label--1 {
-      min-width: 200px;
-      width: 200px;
-    }
-
-    &.label--2 {
-      width: 100%;
-    }
-
-    &.label--120 {
-      max-width: 120px;
-      width: 120px;
-    }
-  }
-}
 
 .ab-tablist {
-
-  padding: 30px 15px;
+  padding: 30px;
 }
 
 .react-tabs__tab-list {
@@ -333,8 +220,13 @@ ol.progtrckr {
 .react-tabs__tab {
   display: flex;
   align-items: center;
-  margin-left: 10px;
+  margin-left: 15px;
   color: $ab--grey;
+
+  p {
+    font-weight: 600;
+    margin-left: 5px;
+  }
 
   &:hover {
     cursor: pointer;
@@ -346,6 +238,9 @@ ol.progtrckr {
 
   &.react-tabs__tab--selected {
     color: $ab--accent;
+    p {
+      color: $ab--accent;
+    }
     svg {
       fill: $ab--accent;
     }
@@ -644,10 +539,45 @@ ol.progtrckr {
 
 .ab-icon {
 
+  &--sm {
+    width: $h--sm;
+    height: $h--sm;
+  }
+
   svg {
     width: 100%;
     max-height: 100%;
   }
 }
 
+.ab-hospital__products {
+  display: flex;
+}
+
+.ab-hospital__product {
+  height: $h--md;
+  padding: 0px 10px;
+  background-color: $ab--lightgrey;
+  display: inline-flex;
+  border-radius: 6px;
+  margin: 5px;
+
+  .ab-icon {
+    max-width: 30px;
+  }
+
+  &__amount {
+    border-left: 1px solid white;
+    font-weight: 500;
+    margin-left: 10px;
+  }
+
+  &__name,
+  &__amount {
+    display: block;
+    padding: 5px 5px 5px 15px;
+    display: flex;
+    align-items: center;
+  }
+}
 

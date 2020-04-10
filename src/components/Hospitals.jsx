@@ -6,12 +6,11 @@ import FilterListItem from './hospitals/FilterListItem';
 import { Scrollbars } from 'react-custom-scrollbars';
 import HospitalsMap from './HospitalsMap';
 import IosPin from 'react-ionicons/lib/IosPin';
-import IosList from 'react-ionicons/lib/IosList';
+import MdList from 'react-ionicons/lib/MdList';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import Container from './layout/Container';
 
 import _ from 'lodash';
-
-
 
 //import products from '../utils/products.js'; // replace later
 import municipalities from '../utils/municipalities.js';
@@ -81,7 +80,6 @@ const Hospitals = () => {
     hospital.isShown = (_onLocation && _onEquipment);
   });
 
-  console.log('hospitals', filters);
   /*  */
   return (
 
@@ -128,10 +126,12 @@ const Hospitals = () => {
           }}>
 
           <div className="ab-tablist">
-            <TabList>
-              <Tab><IosList className="ab-icon ab-icon--sm" /><small>List</small></Tab>
-              <Tab><IosPin className="ab-icon ab-icon--sm" /><small>Map</small></Tab>
-            </TabList>
+            <Container>
+              <TabList>
+                <Tab><MdList className="ab-icon ab-icon--sm" /><p>List</p></Tab>
+                <Tab><IosPin className="ab-icon ab-icon--sm" /><p>Map</p></Tab>
+              </TabList>
+            </Container>
           </div>
 
           <TabPanel>

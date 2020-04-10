@@ -1,4 +1,4 @@
-import React, { Component, useContext } from 'react';
+import React, { Component } from 'react';
 import _ from 'lodash';
 import { firestore } from '../../utils/firebase.js';
 import { collectIdsAndDocs } from '../../utils/tools.js';
@@ -32,7 +32,6 @@ class AddHospitalEquipment extends Component {
   isValidated() {
     const request = this._grabUserInput();
     const { updateStore } = this.props;
-    console.log('request', request);
     updateStore({ request });
 
     return true;
@@ -61,6 +60,7 @@ class AddHospitalEquipment extends Component {
     this.unsubscribeFromFirestore = firestore.collection('products').onSnapshot(snapshot => {
       const products = snapshot.docs.map(collectIdsAndDocs);
       this.products = products;
+      console.log('products', this.products);
       this.setState({ areProductsLoaded: true });
     });
   }
