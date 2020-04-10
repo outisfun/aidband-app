@@ -16,7 +16,6 @@ import municipalities from '../utils/municipalities.js';
 
 const BarMarker = ({ isActive, name, equipment, address, onClose }) => {
   const cls = isActive ? 'is--active' : '';
-  console.log('is is', isActive);
 
   return (
     <div className = {`fb-marker ${cls}`}>
@@ -49,7 +48,7 @@ const BarMarker = ({ isActive, name, equipment, address, onClose }) => {
 
 class HospitalsMap extends Component {
   static defaultProps = {
-    zoom: 10 ,
+    zoom: 8 ,
     center: {
       lat: 42.149210,
       lng: 24.749080
@@ -79,7 +78,6 @@ class HospitalsMap extends Component {
   }
 
   _onMarkerClick = (index, props) => {
-    console.log('click on markerrr');
     this.updateActiveMarker(Number(index));
     const { lat, lng, id } = props;
 
@@ -94,7 +92,6 @@ class HospitalsMap extends Component {
 
   render() {
     const { hospitals } = this.props;
-
     return (
       <div className="ab-hospitals__map">
         <div style={{ height: 'calc(100vh - 100px)', width: '100%', position: 'relative' }}>

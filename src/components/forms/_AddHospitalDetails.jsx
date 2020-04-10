@@ -102,7 +102,6 @@ class AddHospitalDetails extends Component {
           }
         } else {
           this.setState({ isValidated: false });
-          console.log('not happening because we got shitty address or something');
           reject();
         }
       };
