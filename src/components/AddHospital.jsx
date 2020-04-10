@@ -13,8 +13,7 @@ const fields_contact = {
   name: 'Д-р Куин',
   position: 'Шеф на ДКЦ',
   phone_numbers: [],
-  emails: [],
-  is_public_contact: true, // set by admin manually?
+  emails: []
 }
 
 const fields_request = {
@@ -60,6 +59,26 @@ const fields_hospital = {
       lng: 0
     }
   },
+
+  // COLLECTION => accessible by a second db request
+  contacts: [
+    {
+      name: 'Name Surname',
+      position: '',
+      phone_numbers: ['012345678'],
+      emails: []
+    }
+  ],
+
+  // COLLECTION => accessible by a second db request
+  timestamp: {
+    created_by: '', // not sure here
+    created_date: null, // normal timestamp
+    modified_reason: 'INITIAL_INSERT' // we need to define those
+  },
+
+  registrationStatus: 'PENDING',
+
 
   // every time a hospital submits a request,
   // it is stored in a separate collection 'requests'
@@ -108,7 +127,7 @@ class AddHospital extends Component {
 
   uploadToFB() {
 
-    let { name, description, address, product_sums, contacts, timestamp, request } = this.sampleStore;
+    let { hospital_name, description, address, product_sums, contacts, timestamp, request } = this.sampleStore;
 
     // replace later, as hospitals have profiles and can make multiple requests
     request.map(product => {
@@ -127,10 +146,7 @@ class AddHospital extends Component {
       modified_reason: 'INITIAL_INSERT'
     };
 
-    const hospital = { name, description, address, product_sums, contacts, timestamp };
-
-
-
+    const hospital = { hospital_name, description, address, product_sums, contacts, timestamp };
     firestore.collection('hospitals')
       .add(hospital)
       .then((docRef) => {
@@ -143,12 +159,11 @@ class AddHospital extends Component {
           created_by: contacts[0]
         }
 
-        console.log(_request);
         firestore.collection('requests')
           .add(_request)
           .then(_docRef => {
             console.log('added request');
-          })
+          });
       })
       .catch(function(error) {
         console.error("Error adding document: ", error);
@@ -158,6 +173,7 @@ class AddHospital extends Component {
   render() {
     console.log(this.sampleStore, this.currentStep);
     const steps = [
+
       {
         name: "Име и локация",
         component:

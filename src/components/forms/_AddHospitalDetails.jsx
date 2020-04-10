@@ -80,13 +80,19 @@ class AddHospitalDetails extends Component {
           // address is ok, and so are all the other fields.
           if (!(_.includes(this._validationErrors, false))) {
             const { updateStore } = this.props;
-            let update = {
-              ...userInput
+            let hospital = {
+              hospital_name: userInput.hospital_name
             }
-            update.address = address;
-            update.contacts = [];
-            update.contacts.push(userInput.contact);
-            updateStore(update);
+            let contact = {
+              name: userInput.contact_name,
+              phone: userInput.contact_phone,
+              position: userInput.contact_position,
+              email: userInput.contact_email
+            }
+            hospital.address = address;
+            hospital.contacts = [];
+            hospital.contacts.push(contact);
+            updateStore(hospital);
 
             this.setState({ isValidated: true });
             resolve();
@@ -113,8 +119,8 @@ class AddHospitalDetails extends Component {
     const { hospital_name, contact_name, contact_phone, contact_position, contact_email } = data;
     return {
       hospital_name: (hospital_name !== ''), // required: anything besides N/A
-      contact_name: (contact_name !== ''),
-      contact_phone: (contact_phone.length > 0), // can be more precise
+      contact_name: true, //(contact_name !== ''),
+      contact_phone: true, //(contact_phone.length > 0), // can be more precise
       contact_position: true,
       contact_email: true
     };

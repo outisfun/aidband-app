@@ -1,27 +1,9 @@
-import React, { Component } from 'react';
+import React, { Component, useContext } from 'react';
 import _ from 'lodash';
+import { firestore } from '../../utils/firebase.js';
+import { collectIdsAndDocs } from '../../utils/tools.js';
 
-
-
-// pull from DB!!!
-const products = [
-  {
-    product_id: 'GOWN',
-    display_name: 'Medical gowns'
-  },
-  {
-    product_id: 'MASK_N95',
-    display_name: 'Medical gowns'
-  },
-  {
-    product_id: 'OVERSHOES',
-    display_name: 'Medical gowns'
-  },
-  {
-    product_id: 'GLOVES',
-    display_name: 'Medical gowns'
-  }
-];
+const lang = 'en';
 
 class AddHospitalEquipment extends Component {
 
@@ -31,11 +13,13 @@ class AddHospitalEquipment extends Component {
     const fields = props.getStore
     this.state = {
       ...props.getStore(),
-      isAddressValidated: false
+      isAddressValidated: false,
+      areProductsLoaded: true
     };
 
-    this._validateOnDemand = false; // maybe enable later
+    this.products = null; // load from db
 
+    this._validateOnDemand = false; // maybe enable later
     this.validationCheck = this.validationCheck.bind(this);
     this.isValidated = this.isValidated.bind(this);
   }
@@ -48,25 +32,41 @@ class AddHospitalEquipment extends Component {
   isValidated() {
     const request = this._grabUserInput();
     const { updateStore } = this.props;
-
+    console.log('request', request);
     updateStore({ request });
+
+    return true;
   }
 
   // grab and process input
   _grabUserInput() {
     let request = [];
+    console.log('refs', this.refs);
+    this.products && this.products.map(product => {
 
-    _.forEach(products, product => {
-      console.log(Number(this.refs[product.product_id].value));
-      if (Number(this.refs[product.product_id].value) > 0) {
+      if (Number(this.refs[product.id].value) > 0) {
         request.push({
-          product_id: product.product_id,
-          count_requested: Number(this.refs[product.product_id].value)
-        })
+          product_id: product.id,
+          count_requested: Number(this.refs[product.id].value)
+        });
       }
-    });
+    })
 
     return request;
+  }
+
+  unsubscribeFromFirestore = null;
+
+  componentDidMount = async () => {
+    this.unsubscribeFromFirestore = firestore.collection('products').onSnapshot(snapshot => {
+      const products = snapshot.docs.map(collectIdsAndDocs);
+      this.products = products;
+      this.setState({ areProductsLoaded: true });
+    });
+  }
+
+  componentWillUnmount = () => {
+    this.unsubscribeFromFirestore();
   }
 
   // for each product,
@@ -74,26 +74,24 @@ class AddHospitalEquipment extends Component {
   // number(necessity). availability later
 
   render() {
-    console.log('state', this.state);
     return (
       <div className="ab-form__step">
         <form className="ab-form">
-          { products && products.map((product, index) => {
-            let { product_id, display_name } = product;
+          { this.products && this.products.map((product, index) => {
+            let { id, display_name } = product;
             return (
               <div className="ab-form__group" key={`product--${index}`}>
 
                 <div className="ab-form__field field--units">
                   <label className="ab-form__label">
-                    { display_name }
+                    { display_name[lang] }
                   </label>
                   <div className="field-wrapper">
                     <input
-                      ref={product_id}
+                      ref={id}
                       autoComplete="off"
                       type="number"
-                      placeholder='amount'
-                      defaultValue={0} />
+                      placeholder='amount' />
                   </div>
                 </div>
               </div>
