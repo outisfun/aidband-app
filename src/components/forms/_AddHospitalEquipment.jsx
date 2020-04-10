@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
 
+
+
 // pull from DB!!!
 const products = [
   {
