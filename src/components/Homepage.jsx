@@ -38,7 +38,7 @@ const Homepage = () => {
                 <div className="ab-widget__info">
                   <h4 className="ab-heading ab-heading--2">Болници</h4>
                   <p>
-                    В нужда от медицински материали, апаратура и консумативи
+                    В нужда от медицински материали, апаратура & консумативи
                   </p>
                 </div>
                 <Link to="./hospitals" className="ab-button ab-button--goto">
