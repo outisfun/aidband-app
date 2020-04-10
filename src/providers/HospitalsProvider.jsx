@@ -1,6 +1,4 @@
 import React, { Component, createContext } from 'react';
-
-import { withRouter } from 'react-router-dom';
 import { firestore } from '../utils/firebase.js';
 import { collectIdsAndDocs } from '../utils/tools.js';
 
@@ -35,4 +33,4 @@ class HospitalsProvider extends Component {
 
 }
 
-export default withRouter(HospitalsProvider);
+export default HospitalsProvider;

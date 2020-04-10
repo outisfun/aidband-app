@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import NodeGeocoder from 'node-geocoder';
-import Geocode from 'react-geocode';
-import { formatGeocoderResponse } from '../../utils/tools.js';
+import Geocode from "react-geocode";
 import _ from 'lodash';
 
 const options = {
@@ -33,14 +32,13 @@ class AddHospitalDetails extends Component {
   constructor(props) {
     super(props);
 
+    const fields = props.getStore
     this.state = {
-      ...props.getStore()
+      ...props.getStore(),
+      isAddressValidated: false
     };
 
-    this._isAddressValidated = null; // then is either false or true depending on whether it validates
     this._validateOnDemand = true; // this flag enables onBlur validation as user fills forms
-
-    this._validationErrors = null;
 
     this.validationCheck = this.validationCheck.bind(this);
     this.isValidated = this.isValidated.bind(this);
@@ -56,6 +54,14 @@ class AddHospitalDetails extends Component {
   validationCheck() {
     if (!this._validateOnDemand)
       return;
+
+    const userInput = this._grabUserInput();
+    const validateNewInput = this._validateData(userInput);
+
+    let _state = this.state;
+    _state.contacts[0] = userInput.contact;
+
+    this.setState(_state);
   }
 
   // it's run on step submit, so this is where
@@ -66,72 +72,67 @@ class AddHospitalDetails extends Component {
   isValidated() {
     // FIX THIS
     return new Promise((resolve, reject) => {
-
       // should also be validating title though.
-      const _onAddressValidation = (address) => {
-        // address returns object or false
-        if (address) {
+      const _onAddressGeocode = () => {
 
-          const userInput = this._grabUserInput();
+        if (this.state.isAddressValidated) {
+          const { updateStore } = this.props;
+          const { name, address, contacts } = this.state;
+          updateStore({ name, address, contacts });
 
-          this._validationErrors = this._validateData(userInput);
-          this._validationErrors.address = true;
-
-          if (!(_.includes(this._validationErrors, false))) {
-            // if all are true, we can proceed
-            const { updateStore } = this.props;
-            let update = {
-              ...userInput,
-              contacts: []
-            }
-            // update.contacts.push(contact);
-            // updateStore(update);
-            console.log(update);
-            console.log('all good');
-            resolve();
-          } else {
-            console.log('not all fields are ok');
-            reject();
-          }
+          resolve();
         } else {
-          console.log('not happening because we got shitty address or something');
+          reject();
         }
       };
 
-      // address formatting and validation is async,
+      // geocoding the address is async,
       // so make sure the promise resolves or rejects
-      // only after it's done.
-      this._validateAddress(_onAddressValidation);
+      // only after it has been completed
+      this._geocodeAddress(_onAddressGeocode);
     });
-  }
-
-  _validateData(data) {
-    // data = { name: '', contact: { name, position, phone, email } }
-    return {
-      hospital_name: (data.hospital_name !== ''), // required: anything besides N/A
-      contact_name: (data.contact.name !== ''),
-      phone: (data.contact.phone.length > 0), // can be more precise
-      position: true,
-      email: true
-    };
   }
 
   // Geocodes user input address ->
   // Sets state!!! -> accepts callback for once state is set.
-  _validateAddress = (callback) => {
+  _geocodeAddress = (callback) => {
 
     const { address } = this._grabUserInput();
 
     if (address) {
       Geocode.fromAddress(address).then(
         response => {
-          const address = formatGeocoderResponse(response);
-          this._isAddressValidated = true;
-          callback(address);
+          const res = response.results[0];
+          const { lat, lng } = res.geometry.location;
+          const formattedAddress = res.formatted_address;
+          let locality = '';
+          let municipality = '';
+
+          _.forEach(res.address_components, (comp) => {
+            if (_.includes(comp.types, "locality")) {
+              locality = comp.short_name;
+            }
+            if (_.includes(comp.types, "administrative_area_level_1")) {
+              municipality = comp.short_name;
+            }
+          })
+
+          // FIX THIS !!!!!!!
+          let _state = this.state;
+          const { name } = this._grabUserInput();
+          _state.address = {
+            locality: locality,
+            municipality: municipality,
+            formatted_address: formattedAddress,
+            position: { lat, lng }
+          }
+          _state.name = name;
+          _state.isAddressValidated = true;
+          this.setState(_state, callback);
         },
         error => {
-          this._isAddressValidated = false;
-          callback(false);
+          // if no response, set state to not valid address to prevent submit
+          this.setState({ isAddressValidated: false });
           console.error(error);
         }
       );
@@ -140,7 +141,7 @@ class AddHospitalDetails extends Component {
 
   _grabUserInput() {
     return {
-      hospital_name: this.refs.hospital_name.value,
+      name: this.refs.name.value,
       address: this.refs.address.value,
       contact: {
         name: this.refs.contact_name.value,
@@ -151,15 +152,25 @@ class AddHospitalDetails extends Component {
     };
   }
 
+  _validateData(data) {
+    return {
+      name: (data.name !== ''), // required: anything besides N/A
+      address: this.state.isAddressValidated // not sure
+    };
+  }
+
+
+
+
   validateAddress = (e) => {
     e.preventDefault();
-    //this._geocodeAddress();
+    this._geocodeAddress();
   }
 
   render() {
-    const { hospital_name, address, contacts } = this.state;
-    console.log('render with state', this.state);
-    const cls = (this._isAddressValidated !== false) ? 'address-ok' : 'cannot-submit';
+    const { name, address, contacts, isAddressValidated } = this.state;
+    const { getStore } = this.props;
+    const cls = isAddressValidated ? '' : 'cannot-submit';
 
     return (
       <div className={`ab-form__step ${cls}`}>
@@ -168,11 +179,11 @@ class AddHospitalDetails extends Component {
           {/* Hospital name, description, address */}
           <FormGroup label="Name">
             <input
-              ref="hospital_name"
+              ref="name"
               type="text"
               placeholder='Name'
               required
-              defaultValue={ hospital_name }
+              defaultValue={ name }
               onBlur={this.validationCheck} />
           </FormGroup>
 
@@ -189,7 +200,7 @@ class AddHospitalDetails extends Component {
               className="address-validate ab-button ab-button--sm ab-button--default"
               onClick={this.validateAddress} >Валидирай адрес</button>
 
-            {this._isAddressValidated &&
+            {this.state.isAddressValidated &&
               <div className="address-preview">
                 <h6>Result</h6>
 
@@ -250,3 +261,43 @@ class AddHospitalDetails extends Component {
 
 export default AddHospitalDetails;
 
+/* <div className="ab-form__group">
+            <label className="ab-form__label">
+              Адрес
+            </label>
+            <div className="ab-form__field field--validate">
+              <div className="wrapper">
+                <input
+                  ref="address"
+                  autoComplete="off"
+                  type="text"
+                  placeholder='Адрес'
+                  required
+                  defaultValue={'null'}
+                  onBlur={this.updateAddress} />
+
+                <button
+                  className="address-validate ab-button ab-button--sm ab-button--default"
+                  onClick={this.updateAddress} >Валидирай адрес</button>
+              </div>
+
+              { this.state.hospital && this.state.hospital.address.formattedAddress &&
+                <div className="ab-form__field__output">
+                  <h6>Result</h6>
+
+                  <div className="ab-form__field__output__item">
+                    <h6>Форматиран адрес: </h6>
+                    <p></p>
+                  </div>
+                  <div className="ab-form__field__output__item">
+                    <h6>Населено място: </h6>
+                    <p></p>
+                  </div>
+                  <div className="ab-form__field__output__item">
+                    <h6>Географска позиция: </h6>
+                    <p></p>
+                  </div>
+                </div>
+              }
+            </div>
+          </div> */

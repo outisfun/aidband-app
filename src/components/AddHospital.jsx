@@ -49,15 +49,36 @@ const fields_timestamp = {
 }
 
 const fields_hospital = {
-  name: null,
-  description: null,
-  address: fields_address,
+  hospital_name: '',
+  description: '',
+  address: {
+    formatted_address: '',
+    locality: '',
+    municipality: '',
+    position: {
+      lat: 0,
+      lng: 0
+    }
+  },
 
-  // store sums for convenience to avoid extra requests
-  product_sums: [],
+  // every time a hospital submits a request,
+  // it is stored in a separate collection 'requests'
+  // however, to more easily access the sums of all requests
+  // for a certain product, for example gowns,
+  // they are stored here too.
+  product_sums: [
+    {
+      product_id: 'GOWN',
+      sum_requested: 50,
+      sum_delivered: 0 // later
+    }, // ...etc
+  ],
 
-  contacts: [ fields_contact ], // COLLECTION
-  timestamp: fields_timestamp // COLLECTION
+  // COLLECTION => accessible by a second db request
+  contacts: [], // fields_contact
+
+  // COLLECTION => accessible by a second db request
+  timestamp: {} // fields_timestamp
 }
 
 class AddHospital extends Component {
