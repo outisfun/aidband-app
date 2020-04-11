@@ -61,9 +61,9 @@ const Header = () => {
             </li>
           </ul>
         </nav>
-        <button className="ab-header__faq ab-button ab-button--lg ab-button--accent">
-          Регистрация
-        </button>
+        <Link to="./hospitals" className="ab-header__faq ab-button ab-button--lg ab-button--accent">
+          View demo
+        </Link>
       </div>
     </header>
   )
