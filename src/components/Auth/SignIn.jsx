@@ -7,7 +7,7 @@ const SignIn = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
-    
+
     const signInWithEmailAndPasswordHandler = (event, email, password) => {
         event.preventDefault();
     }
@@ -22,7 +22,7 @@ const SignIn = () => {
         }
     }
 
-    return(
+    return (
         <div className="ab-home">
             <section className="ab-sign-in">
                 <Container>
@@ -30,27 +30,29 @@ const SignIn = () => {
                         <h2 className="ab-heading ab-heading--one">
                             Sign In
                         </h2>
-                        <form>
-                            {error !== null && <div className = "py-4 bg-red-600 w-full text-white text-center mb-3">{error}</div>}
-                            <fieldset>
-                                <label>
-                                    E-Mail:
+                        <div className="ab-form__group">
+                            <form onSubmit={event => signInWithEmailAndPasswordHandler(event, email, password)} className="ab-form">
+                                {error !== null && <div className="py-4 bg-red-600 w-full text-white text-center mb-3">{error}</div>}
+                                <fieldset>
+                                    <label className="ab-form__label">
+                                        E-Mail:
                                         <input type="text" name="email" placeholder="user@place.com" value={email} onChange={onChangeHandler} />
-                                </label>
-                                <label>
-                                    Password:
-                                    <input type="password" name="password" value={password} onChange={onChangeHandler} />
-                                </label>
-                            </fieldset>
-                            <div>
-                                <button type="submit" onClick={event => signInWithEmailAndPasswordHandler(event, email, password)}>Login</button>
-                            </div>
-                        </form>
+                                    </label>
+                                    <label className="ab-form__label">
+                                        Password:
+                                        <input type="password" name="password" value={password} onChange={onChangeHandler} />
+                                    </label>
+                                </fieldset>
+                                <div>
+                                    <button type="submit" className="btn ab-button">Login</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                     <div>
                         <p>
                             Don't have an account?{" "}
-                            <Link to="/Register">Sign up here</Link>
+                            <Link to="/Register">Register here</Link>
                             <br />
                             <Link to="/reset-password">Forgot password?</Link>
                         </p>
@@ -58,7 +60,7 @@ const SignIn = () => {
                 </Container>
             </section>
         </div>
-    )
+    );
 }
 
 export default SignIn;
