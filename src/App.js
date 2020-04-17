@@ -1,5 +1,5 @@
-import React from 'react';
-import { Switch, Route, Link, withRouter } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { Switch, Route } from 'react-router-dom';
 import { StickyContainer } from 'react-sticky';
 
 import AddHospital from './components/AddHospital';
@@ -12,8 +12,10 @@ import SignIn from "./components/Auth/SignIn";
 import ResetPassword from "./components/Auth/ResetPassword";
 import RegisterUser from "./components/Auth/RegisterUser";
 
+import { UserContext } from "./providers/UserProvider";
+
 function App() {
-  const user = null;
+  const user = useContext(UserContext);
 
   return (
     <StickyContainer>
@@ -29,9 +31,9 @@ function App() {
           </Switch>
           :
           <Switch>
-            <Route exact path ="/" component = {SignIn} />
             <Route exact path ="/register" component = {RegisterUser} />
             <Route exact path ="/reset-password" component = {ResetPassword} />
+            <Route path ="/" component = {SignIn} />
           </Switch>
           }
         </div>

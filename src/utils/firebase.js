@@ -29,23 +29,24 @@ export const signOut = () => {
   auth.signOut();
 }
 
-export const createUserProfileDocument = async (user, additionalData) => {
+export const generateUserDocument = async (user, additionalData) => {
   if (!user) return;
 
-  const userRef = firestore.doc(`users/${user.uid}`);
+  const userRef = firestore.collection("users").doc(user.uid);
   const snapshot = await userRef.get();
 
   if (!snapshot.exists) {
-    const createdAt = new Date();
-    const { displayName, email, photoURL } = user;
+    const created = new Date();
+    const { firstName, lastName, email, phoneNumber } = user;
     try {
       await userRef.set({
-        displayName: displayName,
+        firstName: firstName,
+        lastName: lastName,
         email: email,
-        photoUrl: photoURL,
-        createdAt,
+        phoneNumber: phoneNumber,
+        created: created,
         ...additionalData
-      })
+      });
     } catch (error) {
       console.error('Error creating user! ', error.message);
     }
@@ -57,7 +58,13 @@ export const createUserProfileDocument = async (user, additionalData) => {
 export const getUserDocument = async (uid) => {
   if (!uid) return null;
   try {
-    return firestore.collection('users').doc(uid);
+    const userDocument = await firestore.collection("users").doc(uid).get();
+    const data = userDocument.data();
+    console.log(data);
+    return {
+      uid,
+      ...data
+    };
   } catch (error) {
     console.error('Error fetching user!', error.message);
   }
