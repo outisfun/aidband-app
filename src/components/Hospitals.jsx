@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { HospitalsContext } from '../providers/HospitalsProvider';
 import { ProductsContext } from '../providers/ProductsProvider';
 import SideNav from './layout/SideNav';
@@ -10,13 +10,15 @@ import MdList from 'react-ionicons/lib/MdList';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import Container from './layout/Container';
 
+import TextResourceHandler from "../utils/textResourceHandler";
+
 import _ from 'lodash';
 
 //import products from '../utils/products.js'; // replace later
 import municipalities from '../utils/municipalities.js';
 import HospitalsList from './HospitalsList';
 
-const lang = 'en'; // switcher later
+const lang = 'bg'; // switcher later
 
 
 const Hospitals = () => {
@@ -26,6 +28,20 @@ const Hospitals = () => {
 
   const [filters, setFilters] = useState([]);
   const [currentMunicipalities, setMunicipalities] = useState([]);
+  const [texts, setTexts] = useState({});
+
+  const textResourceHandler = new TextResourceHandler("hospitals", lang);
+
+  useEffect(() => {
+    async function getTexts() {
+      const map = await textResourceHandler.getMap();
+
+
+
+      setTexts(map);
+    }
+    getTexts();
+  }, []);
 
   const toggleFilter = (filter) => {
     let _filters = filters;
@@ -54,7 +70,7 @@ const Hospitals = () => {
     let _onLocation = true;
     let _onEquipment = true; // display by default
 
-    console.log(hospital);
+    //console.log(hospital);
 
     if (filters.length) {
       _onEquipment = false;
@@ -88,7 +104,9 @@ const Hospitals = () => {
         <Scrollbars style={{ height: (window.innerHeight - 90) }}>
           <div className="ab-hospitals__filters ab-filters">
             <div className="ab-filter__group ab-filter--products">
-              <h6 className="ab-filter__group__title">Products</h6>
+              <h6 className="ab-filter__group__title">
+                {texts.filterHeaderProducts}
+              </h6>
               { products && products.map((product, index) => {
                 const onClick = () => { toggleFilter(product.id); };
                 const cls = (_.includes(filters, product.id)) ? 'is--active has--icon' : 'has--icon';
@@ -128,7 +146,11 @@ const Hospitals = () => {
           <div className="ab-tablist">
             <Container>
               <TabList>
-                <Tab><MdList className="ab-icon ab-icon--sm" /><p>List</p></Tab>
+                <Tab><MdList className="ab-icon ab-icon--sm" />
+                  <p>
+                    {texts.listLinkText}
+                  </p>
+                </Tab>
                 <Tab><IosPin className="ab-icon ab-icon--sm" /><p>Map</p></Tab>
               </TabList>
             </Container>

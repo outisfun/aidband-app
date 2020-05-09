@@ -32,7 +32,7 @@ const HospitalListItem = ({ id, hospital_name, address, product_sums, isShown })
 
   const cls = isShown ? 'is--visible' : ''; // hidden by default, unless isShown is true
   const products = useContext(ProductsContext);
-  console.log('hospital address', address);
+  //console.log('hospital address', address);
   return (
     <div className={`ab-hospitals__list__item ab-hospital ${cls}`}>
 

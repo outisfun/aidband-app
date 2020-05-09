@@ -66,7 +66,16 @@ export const getUserDocument = async (uid) => {
 export const getPageResourceMap = async (pageName, lang) => {
   if (!lang || !pageName) return null;
   try {
-    const pageResourceDocument = await firestore.collection("textResources").doc(pageName).get();
+    const ref = await firestore.collection("textResources").doc(pageName);
+    const doc = await ref.get();
+    console.log(doc);
+    if (!doc.exists) {
+      console.log("Page not found. Adding");
+      const document = {};
+      document[lang] = {};
+      await ref.set(document);
+    }
+    const pageResourceDocument = await ref.get();
     const data = pageResourceDocument.data();
     return data[lang];
   } catch(error) {
@@ -74,12 +83,31 @@ export const getPageResourceMap = async (pageName, lang) => {
   }
 }
 
-export const addPageResourceText = async (pageName, lang, map) => {
+export const addPageResourceText = async (pageName, lang, map, key, value) => {
   if (!pageName || !lang || !map) return;
-  const pageResourceRef = firestore.collection("textResources").doc(pageName);
-  const updates = {};
-  updates[lang] = map;
-  pageResourceRef.update(updates);
+  try {
+    const ref = firestore.collection("textResources").doc(pageName);
+    const document = await ref.get();
+    const data = document.data;
+    const updateData = {};
+    const doUpdate = true;
+    console.log("Data in db", data);
+    if (data[lang]) {
+      if (data[lang][key]) {
+        if (data[lang][key] !== value) {
+          doUpdate = false;
+        }
+      }
+    }
+    if (doUpdate) {
+      console.log("Updating db");
+      updateData[lang] = {};
+      updateData[lang][key] = value;
+      ref.update(updateData);
+    }
+  } catch(error) {
+    console.error(error);
+  }
 }
 
 window.firebase = firebase;
