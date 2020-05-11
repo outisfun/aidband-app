@@ -18,7 +18,7 @@ import _ from 'lodash';
 import municipalities from '../utils/municipalities.js';
 import HospitalsList from './HospitalsList';
 
-const lang = 'bg'; // switcher later
+const lang = 'en'; // switcher later
 
 
 const Hospitals = () => {
@@ -28,17 +28,13 @@ const Hospitals = () => {
 
   const [filters, setFilters] = useState([]);
   const [currentMunicipalities, setMunicipalities] = useState([]);
-  const [texts, setTexts] = useState({});
-
-  const textResourceHandler = new TextResourceHandler("hospitals", lang);
+  const [texts, setTexts] = useState(new TextResourceHandler());
 
   useEffect(() => {
     async function getTexts() {
-      const map = await textResourceHandler.getMap();
-
-
-
-      setTexts(map);
+      const handler = new TextResourceHandler("hospitals", lang);
+      await handler.loadTexts();
+      setTexts(handler);
     }
     getTexts();
   }, []);
@@ -105,7 +101,7 @@ const Hospitals = () => {
           <div className="ab-hospitals__filters ab-filters">
             <div className="ab-filter__group ab-filter--products">
               <h6 className="ab-filter__group__title">
-                {texts.filterHeaderProducts}
+                {texts.get("filterHeaderProducts")}
               </h6>
               { products && products.map((product, index) => {
                 const onClick = () => { toggleFilter(product.id); };
@@ -148,10 +144,14 @@ const Hospitals = () => {
               <TabList>
                 <Tab><MdList className="ab-icon ab-icon--sm" />
                   <p>
-                    {texts.listLinkText}
+                    {texts.get("listLinkText")}
                   </p>
                 </Tab>
-                <Tab><IosPin className="ab-icon ab-icon--sm" /><p>Map</p></Tab>
+                <Tab><IosPin className="ab-icon ab-icon--sm" />
+                  <p>
+                    {texts.get("mapLinkText")}
+                  </p>
+                </Tab>
               </TabList>
             </Container>
           </div>

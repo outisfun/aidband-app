@@ -87,24 +87,15 @@ export const addPageResourceText = async (pageName, lang, map, key, value) => {
   if (!pageName || !lang || !map) return;
   try {
     const ref = firestore.collection("textResources").doc(pageName);
-    const document = await ref.get();
-    const data = document.data;
-    const updateData = {};
-    const doUpdate = true;
-    console.log("Data in db", data);
-    if (data[lang]) {
-      if (data[lang][key]) {
-        if (data[lang][key] !== value) {
-          doUpdate = false;
-        }
-      }
-    }
-    if (doUpdate) {
-      console.log("Updating db");
-      updateData[lang] = {};
-      updateData[lang][key] = value;
-      ref.update(updateData);
-    }
+
+    await firestore.runTransaction(async (transaction) => {
+      const doc = await transaction.get(ref);
+      const data = doc.data();
+      if (!data[lang]) data[lang] = {};
+      data[lang][key] = value;
+      transaction.update(ref, data);
+    });
+
   } catch(error) {
     console.error(error);
   }

@@ -4,6 +4,14 @@ export default class TextResourceHandler {
     constructor(pageName, lang) {
         this.pageName = pageName;
         this.lang = lang;
+        this.loaded = false;
+        this.map = {};
+    }
+
+    async loadTexts() {
+        this.map = await getPageResourceMap(this.pageName, this.lang);
+        if (!this.map) this.map = {};
+        this.loaded = true;
     }
 
     async getMap() {
@@ -13,18 +21,17 @@ export default class TextResourceHandler {
         return map;
     }
 
-    get(key, map) {
-        console.log("TextResourceHandler.get input:", key, map, typeof(map));
+    get(key) {
         if (!key) return null;
-
+        if (!this.loaded) return null;
+        if (!this.map) return null;
         
-        console.log(map);
-        let resource = map[key];
+        let resource = this.map[key];
         if (!resource) {
             console.log("No resource in map. Adding...");
             resource = key;
-            map[key] = resource;
-            addPageResourceText(this.pageName, this.lang, map, key, resource);
+            this.map[key] = resource;
+            addPageResourceText(this.pageName, this.lang, this.map, key, resource);
         }
         return resource;
     }
