@@ -94,8 +94,8 @@ const Hospitals = () => {
 
   /*  */
   return (
-
     <div className="ab-hospitals has--sidenav">
+
       <SideNav>
         <Scrollbars style={{ height: (window.innerHeight - 90) }}>
           <div className="ab-hospitals__filters ab-filters">
@@ -103,7 +103,7 @@ const Hospitals = () => {
               <h6 className="ab-filter__group__title">
                 {texts.get("filterHeaderProducts")}
               </h6>
-              { products && products.map((product, index) => {
+              {products && products.map((product, index) => {
                 const onClick = () => { toggleFilter(product.id); };
                 const cls = (_.includes(filters, product.id)) ? 'is--active has--icon' : 'has--icon';
                 const { display_name } = product;
@@ -120,7 +120,7 @@ const Hospitals = () => {
 
             <div className="ab-filter__group ab-filter--products">
               <h6 className="ab-filter__group__title">Municipalities</h6>
-              { municipalities && municipalities.map((municipality, index) => {
+              {municipalities && municipalities.map((municipality, index) => {
                 const onClick = () => { toggleMunicipality(municipality); };
                 const cls = (_.includes(currentMunicipalities, municipality)) ? 'is--active' : '';
                 return (
@@ -136,34 +136,34 @@ const Hospitals = () => {
         </Scrollbars>
       </SideNav>
 
-        <Tabs onSelect={(val) => {
-          }}>
+      <Tabs onSelect={(val) => {
+      }}>
 
-          <div className="ab-tablist">
-            <Container>
-              <TabList>
-                <Tab><MdList className="ab-icon ab-icon--sm" />
-                  <p>
-                    {texts.get("listLinkText")}
-                  </p>
-                </Tab>
-                <Tab><IosPin className="ab-icon ab-icon--sm" />
-                  <p>
-                    {texts.get("mapLinkText")}
-                  </p>
-                </Tab>
-              </TabList>
-            </Container>
-          </div>
+        <div className="ab-tablist">
+          <Container>
+            <TabList>
+              <Tab><MdList className="ab-icon ab-icon--sm" />
+                <p>
+                  {texts.get("listLinkText")}
+                </p>
+              </Tab>
+              <Tab><IosPin className="ab-icon ab-icon--sm" />
+                <p>
+                  {texts.get("mapLinkText")}
+                </p>
+              </Tab>
+            </TabList>
+          </Container>
+        </div>
 
-          <TabPanel>
-            <HospitalsList hospitals={_hospitals} />
-          </TabPanel>
-          <TabPanel>
-            <HospitalsMap hospitals={_.filter(_hospitals, { 'isShown': true })} />
-          </TabPanel>
+        <TabPanel>
+          <HospitalsList hospitals={_hospitals} />
+        </TabPanel>
+        <TabPanel>
+          <HospitalsMap hospitals={_.filter(_hospitals, { 'isShown': true })} />
+        </TabPanel>
 
-        </Tabs>
+      </Tabs>
 
     </div>
   )
