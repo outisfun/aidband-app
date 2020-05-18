@@ -118,7 +118,9 @@ const Hospitals = () => {
             </div>
 
             <div className="ab-filter__group ab-filter--products">
-              <h6 className="ab-filter__group__title">Municipalities</h6>
+              <h6 className="ab-filter__group__title">
+                {texts.get('filterHeaderMunicipalities')}
+              </h6>
               {municipalities && municipalities.map((municipality, index) => {
                 const onClick = () => { toggleMunicipality(municipality); };
                 const cls = (_.includes(currentMunicipalities, municipality)) ? 'is--active' : '';
