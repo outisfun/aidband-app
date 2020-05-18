@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { HospitalsContext } from '../providers/HospitalsProvider';
 import { ProductsContext } from '../providers/ProductsProvider';
+import { LocaleContext } from "../providers/LocaleProvider";
 import SideNav from './layout/SideNav';
 import FilterListItem from './hospitals/FilterListItem';
 import { Scrollbars } from 'react-custom-scrollbars';
@@ -18,26 +19,24 @@ import _ from 'lodash';
 import municipalities from '../utils/municipalities.js';
 import HospitalsList from './HospitalsList';
 
-const lang = 'en'; // switcher later
-
-
 const Hospitals = () => {
 
   const hospitals = useContext(HospitalsContext);
   const products = useContext(ProductsContext);
+  const locale = useContext(LocaleContext).state;
 
   const [filters, setFilters] = useState([]);
   const [currentMunicipalities, setMunicipalities] = useState([]);
   const [texts, setTexts] = useState(new TextResourceHandler());
-
+  
   useEffect(() => {
     async function getTexts() {
-      const handler = new TextResourceHandler("hospitals", lang);
+      const handler = new TextResourceHandler("hospitals", locale.lang);
       await handler.loadTexts();
       setTexts(handler);
     }
     getTexts();
-  }, []);
+  }, [locale.lang]);
 
   const toggleFilter = (filter) => {
     let _filters = filters;
@@ -112,7 +111,7 @@ const Hospitals = () => {
                     key={`filter--${product.id}`}
                     cls={cls}
                     iconName={product.id}
-                    text={display_name[lang]}
+                    text={display_name[locale.lang]}
                     onClick={onClick} />
                 )
               })}
