@@ -9,7 +9,6 @@
     "@testing-library/user-event": "^7.2.1",
     "crypto-js": "^4.0.0",
     "firebase": "^7.11.0",
-    "global-store-hook": "^1.0.4",
     "google-map-react": "^1.1.7",
     "gsap": "^3.2.4",
     "isotope-layout": "^3.0.6",
