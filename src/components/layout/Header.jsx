@@ -2,14 +2,18 @@ import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 
 import { UserContext } from "../../providers/UserProvider";
+import { LocaleContext } from "../../providers/LocaleProvider";
+
 import { auth } from "../../utils/firebase";
 
 const Header = () => {
   const user = useContext(UserContext);
 
-  const signOut = (event) => {
-    auth.signOut();
-  }
+  const context = useContext(LocaleContext);
+  console.log('In header', context)
+  function setLang(lang) {
+    context.dispatch({ type: "change-language", payload: lang });
+  };
 
   return (
     <header className="ab-header">
@@ -70,11 +74,23 @@ const Header = () => {
             </li>
           </ul>
         </nav>
+        
+        {/* I just can't do styling. Just face it... */}
+        {/* <div className="ab-lang-select">
+          <a onClick={() => setLang("bg")}>
+            <img src={require('../../assets/bulgaria_64.png')} />
+          </a>
+          <a onClick={() => setLang("en")}>
+            <img src={require('../../assets/united_kingdom_64.png')} />
+          </a>
+        </div> */}
+
         {user && (
             <Link to="/" onClick={() => auth.signOut()} className="ab-header__faq ab-button ab-button--lg ab-button--accent">
               Sign Out
             </Link>
         )}
+
         {/* <Link to="./hospitals" className="ab-header__faq ab-button ab-button--lg ab-button--accent">
               View demo
             </Link> */}

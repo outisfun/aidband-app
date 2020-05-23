@@ -8,17 +8,20 @@ import App from './App';
 import HospitalsProvider from './providers/HospitalsProvider';
 import ProductsProvider from './providers/ProductsProvider';
 import UserProvider from './providers/UserProvider';
+import LocaleProvider from "./providers/LocaleProvider";
 
 import './index.scss';
 
 ReactDOM.render(
   <Router>
     <UserProvider>
-      <HospitalsProvider>
-        <ProductsProvider>
-          <App />
-        </ProductsProvider>
-      </HospitalsProvider>
+      <LocaleProvider>
+        <HospitalsProvider>
+          <ProductsProvider>
+            <App />
+          </ProductsProvider>
+        </HospitalsProvider>
+      </LocaleProvider>
     </UserProvider>
   </Router>,
   document.getElementById('root')

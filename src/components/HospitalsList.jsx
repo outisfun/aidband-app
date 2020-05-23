@@ -19,7 +19,7 @@ const HospitalsList = ({ hospitals }) =>  {
         </div>
         <div className="ab-hospitals__list--inner">
           { hospitals && hospitals.map((hospital, index) => {
-            console.log('hospital ', hospital);
+            //console.log('hospital ', hospital);
             return <HospitalListItem {...hospital} key={`hospital--${index}`} />
           })}
         </div>
