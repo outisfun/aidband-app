@@ -63,6 +63,44 @@ export const getUserDocument = async (uid) => {
   }
 }
 
+export const getPageResourceMap = async (pageName, lang) => {
+  if (!lang || !pageName) return null;
+  try {
+    const ref = await firestore.collection("textResources").doc(pageName);
+    const doc = await ref.get();
+    console.log(doc);
+    if (!doc.exists) {
+      console.log("Page not found. Adding");
+      const document = {};
+      document[lang] = {};
+      await ref.set(document);
+    }
+    const pageResourceDocument = await ref.get();
+    const data = pageResourceDocument.data();
+    return data[lang];
+  } catch(error) {
+    console.error(error);
+  }
+}
+
+export const addPageResourceText = async (pageName, lang, map, key, value) => {
+  if (!pageName || !lang || !map) return;
+  try {
+    const ref = firestore.collection("textResources").doc(pageName);
+
+    await firestore.runTransaction(async (transaction) => {
+      const doc = await transaction.get(ref);
+      const data = doc.data();
+      if (!data[lang]) data[lang] = {};
+      data[lang][key] = value;
+      transaction.update(ref, data);
+    });
+
+  } catch(error) {
+    console.error(error);
+  }
+}
+
 window.firebase = firebase;
 
 export default firebase;
