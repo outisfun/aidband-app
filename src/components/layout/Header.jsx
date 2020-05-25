@@ -1,11 +1,10 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
-
 import { LocaleContext } from "../../providers/LocaleProvider";
 
 const Header = () => {
   const context = useContext(LocaleContext);
-  console.log('In header', context)
+
   function setLang(lang) {
     context.dispatch({ type: "change-language", payload: lang });
   };

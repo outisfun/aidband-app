@@ -2,8 +2,6 @@ import React from 'react';
 import Container from './layout/Container';
 import HospitalListItem from './hospitals/HospitalListItem';
 
-import _ from 'lodash';
-
 const HospitalsList = ({ hospitals }) =>  {
 
   return (
@@ -19,7 +17,6 @@ const HospitalsList = ({ hospitals }) =>  {
         </div>
         <div className="ab-hospitals__list--inner">
           { hospitals && hospitals.map((hospital, index) => {
-            //console.log('hospital ', hospital);
             return <HospitalListItem {...hospital} key={`hospital--${index}`} />
           })}
         </div>
