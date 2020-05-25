@@ -1,78 +1,97 @@
 import React, { Component } from 'react';
-import products from '../../utils/products.js'; // replace later
 import _ from 'lodash';
+import { firestore } from '../../utils/firebase.js';
+import { collectIdsAndDocs } from '../../utils/tools.js';
 
+const lang = 'en';
 
 class AddHospitalEquipment extends Component {
 
-  state = {
-    equipment: []
-  }
+  constructor(props) {
+    super(props);
 
-  _validateOnDemand = true;
+    const fields = props.getStore
+    this.state = {
+      ...props.getStore(),
+      isAddressValidated: false,
+      areProductsLoaded: true
+    };
+
+    this.products = null; // load from db
+
+    this._validateOnDemand = false; // maybe enable later
+    this.validationCheck = this.validationCheck.bind(this);
+    this.isValidated = this.isValidated.bind(this);
+  }
 
   validationCheck() {
     if (!this._validateOnDemand)
       return;
-
-    const { name } = this._grabUserInput();
-    this.setState ({ name });
   }
-  validationCheck = this.validationCheck.bind(this);
 
   isValidated() {
-    const { equipment } = this._grabUserInput();
+    const request = this._grabUserInput();
     const { updateStore } = this.props;
+    updateStore({ request });
 
-    updateStore({ equipment });
+    return true;
   }
 
   // grab and process input
   _grabUserInput() {
-    let equipment = [];
-    _.forEach(products, product => {
-      console.log(Number(this.refs[product.id].value));
-      if (Number(this.refs[product.id].value) > 0) {
-        equipment.push({
-          productId: product.id,
-          displayName: product.displayName,
-          amount: Number(this.refs[product.id].value)
-        })
-      }
-    });
+    let request = [];
+    console.log('refs', this.refs);
+    this.products && this.products.map(product => {
 
-    return { equipment };
+      if (Number(this.refs[product.id].value) > 0) {
+        request.push({
+          product_id: product.id,
+          count_requested: Number(this.refs[product.id].value)
+        });
+      }
+    })
+
+    return request;
+  }
+
+  unsubscribeFromFirestore = null;
+
+  componentDidMount = async () => {
+    this.unsubscribeFromFirestore = firestore.collection('products').onSnapshot(snapshot => {
+      const products = snapshot.docs.map(collectIdsAndDocs);
+      this.products = products;
+      console.log('products', this.products);
+      this.setState({ areProductsLoaded: true });
+    });
+  }
+
+  componentWillUnmount = () => {
+    this.unsubscribeFromFirestore();
   }
 
   // for each product,
   // generate a new field that asks for
-  // number(necessity). availability na po-kysen etap
+  // number(necessity). availability later
 
   render() {
-
     return (
       <div className="ab-form__step">
         <form className="ab-form">
-          { products && products.map((product, index) => {
-            let { id, displayName, amountType, units } = product;
-            if (!units) { units = "бр." }
+          { this.products && this.products.map((product, index) => {
+            let { id, display_name } = product;
             return (
               <div className="ab-form__group" key={`product--${index}`}>
 
                 <div className="ab-form__field field--units">
                   <label className="ab-form__label">
-                    { displayName }
+                    { display_name[lang] }
                   </label>
                   <div className="field-wrapper">
                     <input
                       ref={id}
                       autoComplete="off"
                       type="number"
-                      placeholder='amount'
-                      defaultValue={0} />
-                    <span className="units">
-                      { units }
-                    </span>
+                      placeholder='amount' />
                   </div>
                 </div>
               </div>

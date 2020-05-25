@@ -1,12 +1,13 @@
 import React from 'react';
+import Icon from '../elements/Icon';
 
-const FilterListItem = ({ text, cls, onClick }) => {
-
+const FilterListItem = ({ text, cls, onClick, iconName }) => {
   return (
     <button
       className={`ab-filter__item ${cls}`}
       onClick={onClick}>
-        {text}
+        {iconName && <Icon name={iconName} />}
+        <small>{text}</small>
     </button>
   )
 }

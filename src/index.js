@@ -6,14 +6,20 @@ import App from './App';
 
 // providers
 import HospitalsProvider from './providers/HospitalsProvider';
+import ProductsProvider from './providers/ProductsProvider';
+import LocaleProvider from "./providers/LocaleProvider";
 
 import './index.scss';
 
 ReactDOM.render(
   <Router>
-    <HospitalsProvider>
-      <App />
-    </HospitalsProvider>
+    <LocaleProvider>
+      <HospitalsProvider>
+        <ProductsProvider>
+          <App />
+        </ProductsProvider>
+      </HospitalsProvider>
+    </LocaleProvider>
   </Router>,
   document.getElementById('root')
 );

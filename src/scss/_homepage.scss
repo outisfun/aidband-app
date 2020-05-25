@@ -1,0 +1,398 @@
+
+
+$yellow: #FEFBF3;
+$grey: #555555;
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0px;
+  overflow-x: hidden;
+}
+
+.ab-team {
+  padding: 30px 15px;
+}
+
+.ab-container {
+  max-width: 1440px;
+  display: block;
+  margin: 0 auto;
+  padding: 0px 15px;
+}
+
+.ab-section {
+  padding: 60px 0px;
+
+  &__title {
+    font-family: Noto Sans;
+    font-style: normal;
+    font-weight: 900;
+    font-size: 42px;
+    line-height: 95.5%;
+    text-align: center;
+
+    color: $grey;
+    margin-bottom: 45px;
+  }
+
+  @media (min-width: 768px) {
+
+  }
+}
+
+svg {
+  max-width: 100%;
+}
+
+.ab-home__intro {
+  padding: 60px 0px;
+  &--inner {
+    display: flex;
+
+    &__image {
+      width: 100%;
+      svg {
+        max-width: 100%;
+      }
+    }
+
+    @media (max-width: 767px) {
+      flex-direction: column;
+
+      .ab-home__intro__image {
+        order: 1;
+      }
+      .ab-home__intro__text {
+        order: 2;
+      }
+    }
+
+    @media (min-width: 768px) {
+      align-items: center;
+      justify-content: space-between;
+
+      .ab-home__intro__image {
+        min-width: 50%;
+      }
+
+      .ab-home__intro__text {
+        text-align: left;
+        .ab-heading--one {
+          text-align: left;
+          max-width: 450px;
+        }
+        .ab-p {
+          text-align: left;
+          max-width: 450px;
+        }
+      }
+    }
+  }
+}
+
+.ab-heading--one {
+  //text-transform: uppercase;
+  color: $ab--accent;
+  font-size: 30px;
+  text-align: center;
+  margin-bottom: 30px;
+
+  @media (min-width: 768px) {
+    font-size: 36px;
+  }
+}
+
+.ab-p {
+  color: $ab--grey;
+  font-size: 16px;
+  line-height: 1.35em;
+  text-align: center;
+  max-width: 840px;
+  margin: 0 auto;
+  opacity: 0.75;
+
+  @media (min-width: 768px) {
+    font-size: 18px;
+  }
+}
+
+.ab-home__widgets {
+  background-color: #f6f6f6;
+  padding: 60px 0px;
+
+
+  &--inner {
+    display: flex;
+
+    @media (max-width: 767px) {
+      flex-direction: column;
+    }
+
+    @media (min-width: 768px) {
+      margin: 0px -15px;
+    }
+  }
+
+  .ab-home__widget {
+    flex-basis: 0;
+    flex-grow: 1;
+    margin: 0px 15px;
+    height: 300px;
+    min-height: 300px;
+    margin-bottom: 30px;
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    @include u-box-shadow-sm;
+
+    @media (max-width: 767px) {
+      min-height: 240px;
+    }
+
+    @media (min-width: 768px) {
+      margin: 0px 30px;
+    }
+
+    a {
+      display: none;
+    }
+
+    p {
+      line-height: 1.35em;
+    }
+
+    &__content {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      position: relative;
+      z-index: 20;
+      height: 100%;
+      width: 100%;
+      padding: 30px 15px;
+      color: white;
+
+      .ab-widget__info {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .ab-heading {
+        font-size: 30px;
+        font-weight: 600;
+        margin-bottom: 30px;
+      }
+
+      p {
+        color: white;
+        line-height: 1.35em;
+      }
+
+      @media (min-width: 768px) {
+        padding: 30px;
+      }
+    }
+
+    &__background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+
+      .img, .gradient {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .img {
+        background-size: cover;
+        background-position: center center;
+        background-color: grey;
+        background-blend-mode: multiply;
+      }
+
+      .gradient {
+        background: rgb(61,68,233);
+        background: linear-gradient(0deg, rgba(61,68,233,0.5508578431372548) 0%, rgba(61,68,233,1) 100%);
+      }
+    }
+
+    &.widget--campaigns {
+      .ab-home__widget__background {
+        .img {
+          background-image: url('https://zeroattentionspan.net/zas/help.jpg');
+        }
+      }
+    }
+
+    &.widget--hospitals {
+      .ab-home__widget__background {
+        .img {
+          background-image: url('https://zeroattentionspan.net/zas/doctor.jpg');
+        }
+      }
+    }
+
+    &.widget--suppliers {
+      .ab-home__widget__background {
+        .img {
+          background-image: url('https://zeroattentionspan.net/zas/products.jpg');
+        }
+      }
+    }
+  }
+}
+
+.ab-team__members {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 45px 0px;
+  font-family: 'Noto Sans', sans-serif;
+
+  .ab-team__member {
+    width: 100%;
+    margin-bottom: 60px;
+
+    @media (min-width: 768px) {
+      max-width: 33.33%;
+      padding: 0px 15px;
+    }
+
+    @media (min-width: 1200px) {
+      padding: 0px 30px;
+    }
+
+    &--inner {
+      background-color: $yellow;
+      border-radius: 16px;
+      position: relative;
+      padding: 90px 15px 60px;
+      text-align: center;
+    }
+
+    &__img {
+      height: 80px;
+      width: 80px;
+      background-size: cover;
+      background-position: center center;
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translate3d(-50%, -50%, 0);
+      background-color: grey;
+      border-radius: 50%;
+    }
+
+    &__name,
+    &__role,
+    &__bio {
+      margin: 0px;
+    }
+
+    &__name {
+      color: black;
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    &__role {
+      color: $grey;
+      font-weight: bold;
+      font-size: 16px;
+      line-height: 120%;
+      margin-bottom: 15px;
+    }
+
+    &__bio {
+      color: $grey;
+      font-weight: normal;
+      font-size: 16px;
+      line-height: 120%;
+    }
+  }
+}
+
+.ab-heading--section {
+  color: $ab--grey;
+  text-align: center;
+  font-size: 30px;
+  margin-bottom: 30px;
+}
+
+.ab-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  svg {
+    margin-right: 15px;
+  }
+}
+
+.ab-home__about {
+  .ab-logo {
+    margin-bottom: 30px;
+    svg {
+      width: 45px;
+      height: 45px;
+    }
+    span {
+      font-weight: 600;
+      font-size: 24px;
+    }
+  }
+
+  p {
+    max-width: 450px;
+    margin: 0 auto;
+    color: white;
+    text-align: center;
+    line-height: 1.5em;
+  }
+
+  .ab-button {
+    border: 1px solid white;
+    margin: 30px auto 0px;
+    max-width: 240px;
+    justify-content: center;
+  }
+}
+
+.ab-section {
+  padding: 60px 0px;
+
+  &.ab-section--accent {
+    background-color: $ab--accent;
+    color: white;
+
+    .ab-p {
+      color: white;
+    }
+
+    svg {
+      fill: white;
+
+      path {
+        fill: white;
+      }
+    }
+  }
+}
+
+.medical-image {
+  @media (min-width: 1200px) {
+    width: 600px;
+    height: 400px;
+  }
+}

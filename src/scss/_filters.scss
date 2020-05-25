@@ -24,6 +24,7 @@
     align-items: center;
     transition: 0.1s all;
     color: $ab--grey;
+    height: 36px;
 
     &:before {
       height: $h--xs;
@@ -34,8 +35,22 @@
       top: 50%;
       transform: translate3d(0, -50%, 0);
       /*border-radius: 50%;*/
-      border: 1px solid $ab--grey;
       transition: 0.1s all;
+      background-color: $ab--lightgrey;
+      border-radius: 2px;
+    }
+
+    &.has--icon {
+      display: flex;
+      align-items: center;
+      height: 60px;
+
+      .ab-icon {
+        width: 30px;
+        height: 30px;
+        min-width: 30px;
+        margin-right: 10px;
+      }
     }
 
     &.is--active {
@@ -44,6 +59,14 @@
       &:before {
         background-color: $ab--accent;
         border: 1px solid $ab--accent;
+      }
+
+      &.has--icon {
+        .ab-icon {
+          svg {
+            fill: $ab--accent;
+          }
+        }
       }
     }
   }

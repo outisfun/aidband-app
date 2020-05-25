@@ -3,6 +3,8 @@
 @import 'scss/buttons';
 @import 'scss/filters';
 @import 'scss/map';
+@import 'scss/hospitals';
+@import 'scss/_homepage';
 
 .ab-header {
   height: $h--lg;
@@ -121,7 +123,6 @@ input, textarea {
   box-shadow: none;
   border: none;
   width: 100%;
-  margin-bottom: 30px;
   padding: 0px 15px;
   border-radius: 6px;
   font-size: 100%;
@@ -174,12 +175,12 @@ ol.progtrckr {
 }
 
 .has--sidenav {
-  padding-left: 280px;
+  padding-left: 330px;
   background-color: $ab--lightestgrey;
 }
 
 .ab-sidenav {
-  width: 280px;
+  width: 330px;
   position: fixed;
   top: 90px;
   min-height: calc(100vh - 90px);
@@ -193,127 +194,23 @@ ol.progtrckr {
   padding: 30px;
 }
 
-.ab-hospitals__list__item {
-  height: $h--xl;
-  background-color: white;
-  width: 100%;
+
+
+
+.ab-products {
   display: flex;
-  margin-bottom: 15px;
-
-  .ab-hospital__info {
-    width: 200px;
-    min-width: 200px;
-  }
-
-  .ab-hospital__equipment {
-    /*width: 800px;
-    min-width: 800px;*/
-    width: 100%;
-    flex-wrap: wrap;
-  }
-
-  .ab-hospital__more {
-    width: 120px;
-    max-width: 120px;
-    min-width: 120px;
-    border: none;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: $ab--accent;
-    font-weight: 600;
-
-    svg {
-      fill: $ab--accent;
-    }
-  }
 }
 
-
-.ab-hospital__info,
-.ab-hospital__equipment {
-  padding: 15px;
-  border-right: 2px solid $ab--lightgrey;
-}
-
-.ab-equipment {
-  display: flex;
-
-  &__item {
-    height: $h--sm;
-    background-color: $ab--lightgrey;
-    display: flex;
-    border-radius: 6px;
-    margin: 5px;
-
-    &__name {
-      border-right: 1px solid white;
-      font-weight: 500;
-    }
-
-    &__name,
-    &__amount {
-      display: block;
-      margin: 0px;
-      padding: 5px 15px;
-      display: flex;
-      align-items: center;
-    }
-  }
-}
-
-.ab-hospitals__list__item {
-
-  .ab-hospital__name {
-    margin-bottom: $h--xs;
-  }
-
-  .ab-hospital__location {
-    .ab-hospital__address {
-      color: $ab--grey;
-      margin-bottom: $h--xs;
-    }
-  }
-
-  .ab-link {
-    display: flex;
-    align-items: center;
-  }
-}
 
 .ab-h6 {
   color: $ab--grey;
   font-weight: 500;
 }
 
-.ab-hospitals__list__labels {
-  display: flex;
-  align-items: center;
-  padding: 15px 0px;
 
-  .ab-list__label {
-    padding: 0px 15px;
-
-    &.label--1 {
-      min-width: 200px;
-      width: 200px;
-    }
-
-    &.label--2 {
-      width: 100%;
-    }
-
-    &.label--120 {
-      max-width: 120px;
-      width: 120px;
-    }
-  }
-}
 
 .ab-tablist {
-
-  padding: 30px 15px;
+  padding: 30px;
 }
 
 .react-tabs__tab-list {
@@ -324,8 +221,13 @@ ol.progtrckr {
 .react-tabs__tab {
   display: flex;
   align-items: center;
-  margin-left: 10px;
+  margin-left: 15px;
   color: $ab--grey;
+
+  p {
+    font-weight: 600;
+    margin-left: 5px;
+  }
 
   &:hover {
     cursor: pointer;
@@ -337,6 +239,9 @@ ol.progtrckr {
 
   &.react-tabs__tab--selected {
     color: $ab--accent;
+    p {
+      color: $ab--accent;
+    }
     svg {
       fill: $ab--accent;
     }
@@ -435,135 +340,10 @@ ol.progtrckr {
   margin-bottom: 30px;
 }
 
-.ab-p {
-    color: $ab--grey;
-    font-size: 21px;
-    line-height: 1.35em;
-    text-align: center;
-    max-width: 840px;
-    margin: 0 auto;
-    opacity: 0.75;
-  }
 
 
-.ab-home__widgets {
-  display: flex;
-  margin: 0px -15px;
 
-  .ab-home__widget {
-    flex-basis: 0;
-    flex-grow: 1;
-    margin: 0px 15px;
-    height: 300px;
-    position: relative;
-    border-radius: 16px;
-    overflow: hidden;
-    @include u-box-shadow-sm;
 
-    &__content {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      position: relative;
-      position: relative;
-      z-index: 20;
-      height: 100%;
-      width: 100%;
-      padding: 30px 15px;
-      color: white;
-
-      .ab-heading {
-        font-size: 30px;
-        font-weight: 600;
-        margin-bottom: 15px;
-      }
-
-      p {
-        color: white;
-        line-height: 1.2em;
-      }
-    }
-
-    &__background {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-
-      .img, .gradient {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-      }
-
-      .img {
-        background-size: cover;
-        background-position: center center;
-        background-color: grey;
-        background-blend-mode: multiply;
-      }
-
-      .gradient {
-        background: rgb(61,68,233);
-        background: linear-gradient(0deg, rgba(61,68,233,0.5508578431372548) 0%, rgba(61,68,233,1) 100%);
-      }
-    }
-
-    &.widget--campaigns {
-      .ab-home__widget__background {
-        .img {
-          background-image: url('https://zeroattentionspan.net/zas/help.jpg');
-        }
-      }
-    }
-
-    &.widget--hospitals {
-      .ab-home__widget__background {
-        .img {
-          background-image: url('https://zeroattentionspan.net/zas/doctor.jpg');
-        }
-      }
-    }
-
-    &.widget--suppliers {
-      .ab-home__widget__background {
-        .img {
-          background-image: url('https://zeroattentionspan.net/zas/products.jpg');
-        }
-      }
-    }
-  }
-}
-
-.ab-home {
-
-  &__ffs,
-  &__about {
-    padding: 120px 0px;
-
-    @media (max-width: 1199px) {
-      display: none;
-    }
-  }
-
-  &__intro {
-    margin-bottom: 90px;
-  }
-}
-
-.ab-home__about {
-  padding: 90px 0px;
-  background-color: $ab--lightestgrey;
-
-  img {
-    width: 100%;
-    mix-blend-mode: multiply;
-    margin-top: 60px;
-  }
-}
 
 .desktop-only {
   position: fixed;
@@ -582,4 +362,114 @@ ol.progtrckr {
   @media (min-width: 1200px) {
     display: none;
   }
+}
+
+.sorts {
+  display: none;
+}
+
+.ab-form__group {
+  margin-bottom: 30px;
+  position: relative;
+
+  .ab-form__label {
+    margin-bottom: 10px;
+  }
+
+  .error-message {
+    opacity: 0;
+    position: absolute;
+    color: white;
+    background-color: #B00020;
+    font-size: 0.8em;
+    border-radius: 3px;
+    left: 50%;
+    bottom: -30px;
+    height: 25px;
+    padding: 0px 15px;
+    display: flex;
+    align-items: center;
+    transform: translate3d(-50%, 0, 0);
+    line-height: 1em;
+  }
+
+  &.is--not-validated {
+    .error-message {
+      opacity: 1;
+
+      &:after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 0;
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-bottom: 5px solid #B00020;
+        top: -5px;
+        left: 50%;
+        margin-left: -3px;
+      }
+    }
+  }
+}
+
+.ab-icon {
+
+  &--sm {
+    width: $h--sm;
+    height: $h--sm;
+  }
+
+  svg {
+    width: 100%;
+    max-height: 100%;
+  }
+}
+
+.ab-hospital__products {
+  display: flex;
+}
+
+.ab-hospital__product {
+  height: $h--md;
+  padding: 0px 10px;
+  background-color: $ab--lightgrey;
+  display: inline-flex;
+  border-radius: 6px;
+  margin: 5px;
+
+  .ab-icon {
+    max-width: 30px;
+  }
+
+  &__amount {
+    border-left: 1px solid white;
+    font-weight: 500;
+    margin-left: 10px;
+  }
+
+  &__name,
+  &__amount {
+    display: block;
+    padding: 5px 5px 5px 15px;
+    display: flex;
+    align-items: center;
+  }
+}
+
+.desktop-only {
+  display: none;
+}
+
+.ab-header__nav {
+  display: none;
+}
+
+.ab-lang-select {
+  //margin-top: 20px;
+  float: right;
+}
+
+.ab-lang-select:hover {
+  cursor: pointer;
 }

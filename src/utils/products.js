@@ -1,3 +1,6 @@
+// pull from DB
+
+
 const products = [
   {
     id: 'mask_n95',
